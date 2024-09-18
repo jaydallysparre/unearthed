@@ -5,6 +5,9 @@
 #include "InputHandler.h"
 #include "HBSprite.h"
 #include <iostream>
+#include <vector>
+#include <array>
+#include "Level.h"
 
 enum class Team {
     ALLY,
@@ -24,12 +27,14 @@ protected:
     HBSprite sprite;
     Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
 public:
-    void virtual move(sf::Vector2f direction, float dt);
+    void virtual move(sf::Vector2f direction, Level& level, float dt);
     void virtual attack(sf::Vector2i attackDir) = 0;
     void virtual takeDamage(int dmgAmount) = 0;
-    void listenToInput(float dt);
+    void listenToInput(float dt, Level& level);
     void display(sf::RenderWindow& window);
-    void virtual update(sf::RenderWindow& window, float dt);
+    bool isColliding(Level& level);
+    sf::Vector2f getPosition();
+    void virtual update(sf::RenderWindow& window, Level& level, float dt);
 };
 
 #endif

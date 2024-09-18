@@ -2,9 +2,10 @@
 
 Level::Level() {}
 
-Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize) {
+Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles) : collidableTiles(collidableTiles) {
     loadFromFile(lvlFilename);
     loadSpriteSheet(spriteFilename, tileSize);
+    generateCollisionMap();
 }
 
 bool Level::loadFromFile(std::string filename) {
@@ -26,11 +27,39 @@ bool Level::loadFromFile(std::string filename) {
     return true;
 }
 
+int Level::getTileSize() {
+    return tileSize;
+}
+
 bool Level::loadSpriteSheet(std::string filename, int tileSize) {
     this->tileSize = tileSize;
     return spritesheet.loadFromFile(filename);
 }
 
+std::vector<std::vector<int>> Level::generateCollisionMap() {
+    for (int i = 0; i < level.size(); ++i) {
+        std::vector<int> row;
+        collisionMap.push_back(row);
+        for (int j = 0; j < level[i].size(); ++j) {
+            bool isCollidable = false;
+            for (int tile = 0; tile < collidableTiles.size(); ++tile) {
+                if (collidableTiles[tile] == level[i][j]) {
+                    collisionMap[i].push_back(1);
+                    isCollidable = true;
+                    break;
+                }
+            }
+            if (!isCollidable) {
+                collisionMap[i].push_back(0);
+            }
+        }
+    }
+    return collisionMap;
+}
+
+std::vector<std::vector<int>> Level::getCollisionMap() {
+    return collisionMap;
+}
 
 void Level::display(sf::RenderWindow& window) {
     for (int i = 0; i < level.size(); ++i) {
@@ -38,8 +67,8 @@ void Level::display(sf::RenderWindow& window) {
             int sIdx = level[i][j]; // sprite index
             if (sIdx != -1) {
                 sf::VertexArray tile(sf::TriangleStrip, 4);
-                int xOff = j*32;
-                int yOff = i*32;
+                int xOff = j*tileSize;
+                int yOff = i*tileSize;
 
                 // Tile Position
                 tile[0].position = sf::Vector2f(xOff, yOff);
