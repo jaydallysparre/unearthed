@@ -2,28 +2,32 @@
 #include <iostream>
 #include <vector>
 #include "Level.h"
+#include "KBMInput.h"
+#include "Entity.h"
+
+class Commando : public Entity {
+public:
+    Commando(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : Entity(inputHandler, spawnPos, team) {
+        spriteTexture.loadFromFile("commando_idle.png");
+        sprite.setTexture(spriteTexture);
+        sprite.setHitbox({0.f, 0.f, 32.f, 32.f});
+        speed = 150;
+        health = 300;
+    }
+    void attack(sf::Vector2i attackDir) {
+        //
+    }
+    void takeDamage(int dmgAmount) {
+        //
+    }
+};
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(640, 480), "SFML");
-    /*
-    sf::Texture texture;
-    if (!texture.loadFromFile("baller.png")) {
-        std::cerr << "Error! baller.png did not load" << '\n';
-        return -1;
-    }
-    */
-    
-    std::vector<sf::Texture> textures;
-    for (int i = 0; i < 3; ++i) {
-        sf::Texture texture;
-        if (!texture.loadFromFile(std::to_string(i) + ".png")) {
-            return -1;
-        }
-        textures.push_back(texture);
-    }
-
-    Level level("level1.txt", textures, 32);
-    
+    Level level("level1.txt", "level1.png", 32);
+    KBMInput playerInput;
+    sf::Vector2f spawnPos(64.f, 64.f);
+    Commando player(&playerInput, spawnPos, Team::ALLY);
     sf::Clock deltaClock;
     while (window.isOpen()) {
         float dt = deltaClock.restart().asSeconds();
@@ -37,6 +41,7 @@ int main() {
         }
         window.clear();
         level.display(window);
+        player.update(window, dt);
         window.display();
     }
     return 0;

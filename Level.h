@@ -10,12 +10,12 @@
 class Level {
 private:
     std::vector<std::vector<int>> level;
-    std::vector<sf::Texture> textures;
+    sf::Texture spritesheet;
     int tileSize;
 public:
     Level();
-    Level(std::string filename, std::vector<sf::Texture> textures, int tileSize);
-    void setTextures(std::vector<sf::Texture> texture, int tileSize);
+    Level(std::string lvlFilename, std::string spriteFilename, int tileSize);
+    bool loadSpriteSheet(std::string filename, int tileSize);
     bool loadFromFile(std::string filename);
     void display(sf::RenderWindow& window);
 };

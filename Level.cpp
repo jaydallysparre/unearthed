@@ -2,8 +2,9 @@
 
 Level::Level() {}
 
-Level::Level(std::string filename, std::vector<sf::Texture> textures, int tileSize): textures(textures), tileSize(tileSize) {
-    loadFromFile(filename);
+Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize) {
+    loadFromFile(lvlFilename);
+    loadSpriteSheet(spriteFilename, tileSize);
 }
 
 bool Level::loadFromFile(std::string filename) {
@@ -25,26 +26,34 @@ bool Level::loadFromFile(std::string filename) {
     return true;
 }
 
-void Level::setTextures(std::vector<sf::Texture> textures, int tileSize) {
+bool Level::loadSpriteSheet(std::string filename, int tileSize) {
     this->tileSize = tileSize;
-    this->textures = textures;
+    return spritesheet.loadFromFile(filename);
 }
+
 
 void Level::display(sf::RenderWindow& window) {
     for (int i = 0; i < level.size(); ++i) {
         for (int j = 0; j < level[i].size(); ++j) {
-            sf::VertexArray tile(sf::TriangleStrip, 4);
-            int xOff = j*32;
-            int yOff = i*32;
-            tile[0].position = sf::Vector2f(xOff, yOff);
-            tile[1].position = sf::Vector2f(xOff, 32+yOff);
-            tile[2].position = sf::Vector2f(32+xOff, yOff);
-            tile[3].position = sf::Vector2f(32+xOff, 32+yOff);
-            tile[0].texCoords = sf::Vector2f(0, 0);
-            tile[1].texCoords = sf::Vector2f(0, 32);
-            tile[2].texCoords = sf::Vector2f(32, 0);
-            tile[3].texCoords = sf::Vector2f(32, 32);
-            window.draw(tile, &textures[level[i][j]]);
+            int sIdx = level[i][j]; // sprite index
+            if (sIdx != -1) {
+                sf::VertexArray tile(sf::TriangleStrip, 4);
+                int xOff = j*32;
+                int yOff = i*32;
+
+                // Tile Position
+                tile[0].position = sf::Vector2f(xOff, yOff);
+                tile[1].position = sf::Vector2f(xOff, tileSize+yOff);
+                tile[2].position = sf::Vector2f(tileSize+xOff, yOff);
+                tile[3].position = sf::Vector2f(tileSize+xOff, tileSize+yOff);
+
+                // Tile spritesheet offset
+                tile[0].texCoords = sf::Vector2f(tileSize*sIdx, 0);
+                tile[1].texCoords = sf::Vector2f(tileSize*sIdx, tileSize);
+                tile[2].texCoords = sf::Vector2f(tileSize+tileSize*sIdx, 0);
+                tile[3].texCoords = sf::Vector2f(tileSize+tileSize*sIdx, tileSize);
+                window.draw(tile, &spritesheet);
+            }
         }
     }
 }
