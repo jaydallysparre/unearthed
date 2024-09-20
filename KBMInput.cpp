@@ -1,7 +1,8 @@
 #include "KBMInput.h"
 
-void KBMInput::handleInputs() {
+void KBMInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     move = true;
+    attack = false;
     moveDir.x = moveDir.y = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         moveDir.y -= 1;
@@ -21,6 +22,7 @@ void KBMInput::handleInputs() {
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         attack = true;
-        attackDir = sf::Mouse::getPosition();
+        attackDir = MathUtil<sf::Vector2f>::normalize(window.mapPixelToCoords(sf::Mouse::getPosition(window)) - entityOrigin);
+    
     }
 }

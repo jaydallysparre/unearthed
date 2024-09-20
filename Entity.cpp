@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "MathUtil.h"
 
 Entity::Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : inputHandler(inputHandler), team(team) {
     sprite.move(spawnPos);
@@ -25,13 +26,14 @@ void Entity::takeDamage(int dmgAmount) {
     health -= dmgAmount;
 }
 
-void Entity::listenToInput(float dt, Level& level) {
-    inputHandler->handleInputs();
+void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
+    inputHandler->handleInputs(getOrigin(), window);
     if (inputHandler->isMoving() && canMove) {
         move(inputHandler->getMoveDir(), level, dt);
     }
-    if (inputHandler->isAttacking() && canAttack) {
+    if (inputHandler->isAttacking() && attackTimer.getElapsedTime().asSeconds() > 0.25) {
         attack(inputHandler->getAttackDir());
+        attackTimer.restart();
     }
 }
 
@@ -63,7 +65,12 @@ sf::Vector2f Entity::getPosition() {
     return sprite.getPosition();
 }
 
+sf::Vector2f Entity::getOrigin() {
+    sf::FloatRect hitbox = sprite.getGlobalHitbox();
+    return sf::Vector2f(hitbox.left + (hitbox.width)/2, hitbox.top + (hitbox.height)/2);
+}
+
 void Entity::update(sf::RenderWindow& window, Level& level, float dt) {
-    listenToInput(dt, level);
+    listenToInput(dt, level, window);
     display(window);
 }

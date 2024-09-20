@@ -1,12 +1,11 @@
 #ifndef COMMANDO_H
 #define COMMANDO_H
 
-#include "Entity.h"
+#include "RangedEntity.h"
 
-class Commando : public Entity {
+class Commando : public RangedEntity {
 public:
     Commando(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
-    void attack(sf::Vector2i attackDir) {}
 };
 
 #endif

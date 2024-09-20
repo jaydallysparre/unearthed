@@ -14,12 +14,12 @@ protected:
     bool attack;
     bool special;
     sf::Vector2f moveDir;
-    sf::Vector2i attackDir;
+    sf::Vector2f attackDir;
 public:
-    void virtual handleInputs() = 0;
+    void virtual handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) = 0;
     bool isMoving();
     sf::Vector2f getMoveDir();
-    sf::Vector2i getAttackDir();
+    sf::Vector2f getAttackDir();
     bool isAttacking();
     bool isSpecialing();
 };

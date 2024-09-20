@@ -20,6 +20,7 @@ protected:
     int speed;
     bool canMove = true;
     bool canAttack = true;
+    sf::Clock attackTimer;
     sf::Vector2f velocity;
     InputHandler* inputHandler;
     Team team;
@@ -28,12 +29,13 @@ protected:
     Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
 public:
     void virtual move(sf::Vector2f direction, Level& level, float dt);
-    void virtual attack(sf::Vector2i attackDir) = 0;
+    void virtual attack(sf::Vector2f attackDir) = 0;
     void virtual takeDamage(int dmgAmount);
-    void listenToInput(float dt, Level& level);
+    void listenToInput(float dt, Level& level, sf::RenderWindow& window);
     void display(sf::RenderWindow& window);
     bool isColliding(Level& level);
     sf::Vector2f getPosition();
+    sf::Vector2f getOrigin(); // Get center of hitbox
     void virtual update(sf::RenderWindow& window, Level& level, float dt);
 };
 

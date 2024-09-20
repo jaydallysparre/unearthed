@@ -16,6 +16,6 @@ sf::Vector2f InputHandler::getMoveDir() {
     return moveDir;
 }
 
-sf::Vector2i InputHandler::getAttackDir() {
+sf::Vector2f InputHandler::getAttackDir() {
     return attackDir;
 }

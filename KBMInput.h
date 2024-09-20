@@ -6,7 +6,7 @@
 
 class KBMInput : public InputHandler {
 public:
-    void handleInputs();
+    void handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window);
 };
 
 #endif
