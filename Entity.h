@@ -29,7 +29,7 @@ protected:
 public:
     void virtual move(sf::Vector2f direction, Level& level, float dt);
     void virtual attack(sf::Vector2i attackDir) = 0;
-    void virtual takeDamage(int dmgAmount) = 0;
+    void virtual takeDamage(int dmgAmount);
     void listenToInput(float dt, Level& level);
     void display(sf::RenderWindow& window);
     bool isColliding(Level& level);

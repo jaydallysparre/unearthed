@@ -4,23 +4,7 @@
 #include "Level.h"
 #include "KBMInput.h"
 #include "Entity.h"
-
-class Commando : public Entity {
-public:
-    Commando(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : Entity(inputHandler, spawnPos, team) {
-        spriteTexture.loadFromFile("commando_idle.png");
-        sprite.setTexture(spriteTexture);
-        sprite.setHitbox({8.f, 0.f, 16.f, 32.f});
-        speed = 150;
-        health = 300;
-    }
-    void attack(sf::Vector2i attackDir) {
-        //
-    }
-    void takeDamage(int dmgAmount) {
-        //
-    }
-};
+#include "Commando.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(640, 480), "SFML");

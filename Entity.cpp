@@ -21,6 +21,10 @@ void Entity::move(sf::Vector2f direction, Level& level, float dt) {
     }
 }
 
+void Entity::takeDamage(int dmgAmount) {
+    health -= dmgAmount;
+}
+
 void Entity::listenToInput(float dt, Level& level) {
     inputHandler->handleInputs();
     if (inputHandler->isMoving() && canMove) {
