@@ -3,37 +3,31 @@
 #include <vector>
 #include "Level.h"
 #include "KBMInput.h"
+#include "AIInput.h"
 #include "Commando.h"
+#include "SceneManager.h"
+#include "GameScene.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML");
-    Level level("level1.txt", "level1.png", 32, {2});
-    KBMInput playerInput;
-    sf::Vector2f spawnPos(64.f, 64.f);
-    Commando player(&playerInput, spawnPos, Team::ALLY);
-    sf::View view = window.getDefaultView();
-    window.setView(view);
-    view.zoom(0.75);
+    sf::RenderWindow window(sf::VideoMode(800,600), "SFML Project");
     sf::Clock deltaClock;
+
+    GameScene* game = new GameScene(&window, Level("level1.txt", "level1.png", 32, {2}));
+    Entity* player = new Commando(new KBMInput(), sf::Vector2f(64.f, 64.f), Team::ALLY, game->getBulletManager());
+    Entity* enemy = new Commando(new AIInput(), sf::Vector2f(128.f, 128.f), Team::ENEMY, game->getBulletManager());
+    game->addPlayer(player);
+    game->addEnemy(enemy);
+    SceneManager sceneManager(game);
+
     while (window.isOpen()) {
+        // Handle SFML events (closing game, resizing window, etc)
         float dt = deltaClock.restart().asSeconds();
         sf::Event event;
-        while (window.pollEvent(event)) {
-            switch (event.type) {
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                case sf::Event::Resized:
-                    view = sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height));
-                    view.zoom(0.75);
-                    break;
-            }
-        }
+        sceneManager.handleEvents(window, event);
+
+        // Update and display scene
         window.clear();
-        view.setCenter(player.getOrigin());
-        window.setView(view);
-        level.display(window);
-        player.update(window, level, dt);
+        sceneManager.runScene(dt);
         window.display();
     }
     return 0;
