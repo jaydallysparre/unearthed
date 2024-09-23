@@ -6,7 +6,7 @@
 class Bullet {
 private:
     sf::Vector2f direction;
-    int speed = 300;
+    int speed = 500;
     int damage;
     Team team;
     sf::Texture spriteTexture;

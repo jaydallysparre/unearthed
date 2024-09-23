@@ -19,3 +19,7 @@ void SceneManager::runScene(float dt) {
     currentScene->update(dt);
     currentScene->draw();
 }
+
+void SceneManager::drawScene() {
+    currentScene->draw();
+}

@@ -5,6 +5,10 @@ Entity::Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : i
     sprite.move(spawnPos);
 }
 
+Entity::~Entity() {
+    delete inputHandler;
+}
+
 void Entity::move(sf::Vector2f direction, Level& level, float dt) {
     velocity.x = direction.x * speed * dt;
     velocity.y = direction.y * speed * dt;
@@ -25,6 +29,14 @@ void Entity::move(sf::Vector2f direction, Level& level, float dt) {
 void Entity::takeDamage(int dmgAmount) {
     health -= dmgAmount;
     std::cout << "took " << dmgAmount << "dmg, current health = " << health << "\n";
+}
+
+int Entity::getValue() {
+    return value;
+}
+
+bool Entity::isDead() {
+    return health <= 0;
 }
 
 void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {

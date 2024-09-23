@@ -11,6 +11,7 @@ public:
     void switchScene(Scene* scene);
     void handleEvents(sf::RenderWindow& window, sf::Event event);
     void runScene(float dt); 
+    void drawScene();
 };
 
 #endif

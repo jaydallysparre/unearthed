@@ -19,8 +19,14 @@ void GameScene::addEnemy(Entity* enemy) {
     entities.push_back(enemy);
 }
 
+void GameScene::killEntity(int idx) {
+    playerMoney += entities[idx]->getValue();
+    delete entities[idx];
+    entities.erase(entities.begin() + idx);
+}
+
 BulletManager* GameScene::getBulletManager() {
-    return &bulletManager;
+return &bulletManager;
 }
 
 void GameScene::handleEvent(sf::Event event) {
@@ -34,8 +40,12 @@ void GameScene::update(float dt) {
     gameCamera.setCenter(player->getOrigin());
     window->setView(gameCamera);
     player->update(*window, level, dt);
-    for (Entity* entity: entities) {
-        entity->update(*window, level, dt);
+
+    for (int i = 0; i < entities.size(); ++i) {
+        entities[i]->update(*window, level, dt);
+        if (entities[i]->isDead()) {
+            killEntity(i);
+        }
     }
     bulletManager.update(level, entities, dt);
 }

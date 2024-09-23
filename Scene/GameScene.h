@@ -10,6 +10,7 @@ class GameScene : public Scene {
 private:
     Level level;
     Entity* player;
+    int playerMoney = 0;
     sf::View gameCamera;
     std::vector<Entity*> entities;
     BulletManager bulletManager;
@@ -19,6 +20,7 @@ public:
     BulletManager* getBulletManager();
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
+    void killEntity(int idx);
     void handleEvent(sf::Event event); 
     void update(float dt);
     void draw();
