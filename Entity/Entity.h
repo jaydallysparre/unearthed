@@ -22,6 +22,7 @@ protected:
     int value; // dollar value to give to player
     bool canMove = true;
     bool canAttack = true;
+    float attackDelay = 0.3;
     sf::Clock attackTimer;
     sf::Vector2f velocity;
     InputHandler* inputHandler;
@@ -41,6 +42,7 @@ public:
     bool isColliding(Level& level);
     bool pointInEntity(sf::Vector2f point);
     Team getTeam();
+    InputHandler* getInputHandler();
     sf::Vector2f getPosition();
     sf::Vector2f getOrigin(); // Get center of hitbox
     void virtual update(sf::RenderWindow& window, Level& level, float dt);

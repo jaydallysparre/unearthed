@@ -6,13 +6,13 @@
 class Bullet {
 private:
     sf::Vector2f direction;
-    int speed = 500;
+    int speed;
     int damage;
     Team team;
     sf::Texture spriteTexture;
     sf::Sprite sprite;
 public:
-    Bullet(sf::Vector2f direction, sf::Vector2f spawnPos, Team team, int damage);
+    Bullet(sf::Vector2f direction, sf::Vector2f spawnPos, Team team, int damage, int speed);
     int getDamage();
     Team getTeam();
     void move(float dt);

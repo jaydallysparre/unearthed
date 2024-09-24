@@ -18,6 +18,7 @@ public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();
     BulletManager* getBulletManager();
+    Level* getLevel();
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
     void killEntity(int idx);

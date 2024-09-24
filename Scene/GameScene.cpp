@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "AIInput.h"
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
     gameCamera = window->getDefaultView();
@@ -29,6 +30,10 @@ BulletManager* GameScene::getBulletManager() {
 return &bulletManager;
 }
 
+Level* GameScene::getLevel() {
+    return &level;
+}
+
 void GameScene::handleEvent(sf::Event event) {
     if (event.type == sf::Event::Resized) {
         gameCamera = sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height));
@@ -54,6 +59,13 @@ void GameScene::draw() {
     level.display(*window);
     bulletManager.display(*window);
     for (Entity* entity: entities) {
+        InputHandler* IH = entity->getInputHandler();
+
+        for (AINode* n : (static_cast<AIInput*>(IH))->getNodePath()) {
+            sf::CircleShape shape(2);
+            shape.setPosition(sf::Vector2f(n->x*32+16, n->y*32+16));
+            window->draw(shape);
+        }
         entity->display(*window);
     }
     player->display(*window);

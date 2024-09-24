@@ -1,5 +1,7 @@
 #include "InputHandler.h"
 
+InputHandler::InputHandler() {}
+
 bool InputHandler::isMoving() {
     return move;
 }

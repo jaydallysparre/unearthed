@@ -44,7 +44,7 @@ void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
     if (inputHandler->isMoving() && canMove) {
         move(inputHandler->getMoveDir(), level, dt);
     }
-    if (inputHandler->isAttacking() && attackTimer.getElapsedTime().asSeconds() > 0.25) {
+    if (inputHandler->isAttacking() && attackTimer.getElapsedTime().asSeconds() > attackDelay) {
         attack(inputHandler->getAttackDir());
         attackTimer.restart();
     }
@@ -80,6 +80,10 @@ bool Entity::pointInEntity(sf::Vector2f point) {
 
 Team Entity::getTeam() {
     return team;
+}
+
+InputHandler* Entity::getInputHandler() {
+    return inputHandler;
 }
 
 sf::Vector2f Entity::getPosition() {

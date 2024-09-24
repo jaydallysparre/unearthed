@@ -23,6 +23,5 @@ void KBMInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         attack = true;
         attackDir = MathUtil<sf::Vector2f>::normalize(window.mapPixelToCoords(sf::Mouse::getPosition(window)) - entityOrigin);
-    
     }
 }

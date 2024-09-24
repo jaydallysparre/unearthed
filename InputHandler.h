@@ -16,6 +16,7 @@ protected:
     sf::Vector2f moveDir;
     sf::Vector2f attackDir;
 public:
+    InputHandler();
     void virtual handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) = 0;
     bool isMoving();
     sf::Vector2f getMoveDir();
