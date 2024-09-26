@@ -47,7 +47,7 @@ std::vector<AINode*> AIInput::getNeighbours(AINode* node) {
     return neighbours;
 }
 
-std::vector<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
+std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
     resetNodeMap();
     std::vector<AINode*> open;
     std::vector<AINode*> closed;
@@ -65,15 +65,14 @@ std::vector<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
         AINode* current = open[currentIdx];
         
         if (current->x == end.x && current->y == end.y) { // goal reached
-            std::vector<AINode*> path;
+            std::stack<AINode*> path;
             int l = 0;
             while (current != nullptr) {
-                path.push_back(current);
+                path.push(current);
                 current = current->parent;
                 l++;
                 std::cout << l << '\n';
             }
-            std::reverse(path.begin(), path.end());
             return path;
         }
 
@@ -99,32 +98,34 @@ std::vector<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
             neighbour->fCost =  neighbour->gCost + neighbour->hCost;
         }
     }
-   return std::vector<AINode*>{};
+   return std::stack<AINode*>{};
 }
 
 sf::Vector2f AIInput::getNodeDirection(sf::Vector2f entityOrigin, AINode& node) {
     return MathUtil<sf::Vector2f>::normalize(sf::Vector2f(node.x*32+16, node.y*32+16) - entityOrigin);
 }
 
-std::vector<AINode*> AIInput::getNodePath() {
+std::stack<AINode*> AIInput::getNodePath() {
     return path;
 }
 
 void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     move = false;
-    AINode selfNode = level->getNodeMap()[entityOrigin.y/level->getTileSize()][entityOrigin.x/level->getTileSize()];
-    AINode targetNode = level->getNodeMap()[target->getOrigin().y/level->getTileSize()][target->getOrigin().x/level->getTileSize()];
     if (timer.getElapsedTime().asSeconds() > 0.5) {
+        AINode selfNode = AINode(entityOrigin.x/level->getTileSize(), entityOrigin.y/level->getTileSize(), true);
+        AINode targetNode = AINode(target->getOrigin().x/level->getTileSize(), target->getOrigin().y/level->getTileSize(), true);
+
         path = findPath(selfNode, targetNode);
         timer.restart();
     }
     
     if (!path.empty()) {
-        moveDir = getNodeDirection(entityOrigin, *path[0]);
-        sf::Vector2f nextNode(path[0]->x*32+16, path[0]->y*32+16);
+
+        moveDir = getNodeDirection(entityOrigin, *path.top());
+        sf::Vector2f nextNode(path.top()->x*32+16, path.top()->y*32+16);
         std::cout << MathUtil<sf::Vector2f>::distance(entityOrigin, nextNode) << '\n';
         if (MathUtil<sf::Vector2f>::distance(entityOrigin, nextNode) <= 32) {
-            path.erase(path.begin());
+            path.pop();
         }
         move = true;
     }

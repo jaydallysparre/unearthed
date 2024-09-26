@@ -6,7 +6,6 @@ Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize, 
     loadFromFile(lvlFilename);
     loadSpriteSheet(spriteFilename, tileSize);
     generateCollisionMap();
-    generateNodeMap();
 }
 
 bool Level::loadFromFile(std::string filename) {
@@ -60,39 +59,6 @@ std::vector<std::vector<int>> Level::generateCollisionMap() {
 
 std::vector<std::vector<int>> Level::getCollisionMap() {
     return collisionMap;
-}
-
-std::vector<std::vector<AINode>> Level::generateNodeMap() {
-    std::vector<std::vector<AINode>> nodeMap;
-    for (int i = 0; i < collisionMap.size(); ++i) {
-        nodeMap.push_back(std::vector<AINode>{});
-        for (int j = 0; j < collisionMap[i].size(); ++j) {
-            nodeMap[i].push_back(AINode(j, i, !collisionMap[i][j]));
-        }
-    }
-    this->nodeMap = nodeMap;
-    return nodeMap;
-}
-
-std::vector<std::vector<AINode>> Level::getNodeMap()  {
-    return nodeMap;
-}
-
-std::vector<AINode*> Level::getNeighbours(AINode* node) {
-    std::vector<AINode*> neighbours;
-    for (int i = -1; i < 2; ++i) {
-        for (int j = -1; j < 2; ++j) {
-            if (i == 0 && j == 0) {
-                continue;
-            }
-            int newY = node->y + i;
-            int newX = node->x + j;
-            if ((newY > 0 && newY < nodeMap.size()) && newX > 0 && newX < nodeMap[newY].size()) {
-                neighbours.push_back(&nodeMap[newY][newX]);
-            }
-        }
-    }
-    return neighbours;
 }
 
 void Level::display(sf::RenderWindow& window) {

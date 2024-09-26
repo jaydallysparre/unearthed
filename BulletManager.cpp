@@ -17,8 +17,9 @@ void BulletManager::update(Level& level, std::vector<Entity*> entities, float dt
         }
         for (int j = 0; j < entities.size(); j++) {
             if (bullets[i]->isEntityColliding(entities[j]) && entities[j]->getTeam() != bullets[i]->getTeam()) {
-                entities[j]->takeDamage(bullets[i]->getDamage());
-                removeBullet(i);
+               entities[j]->takeDamage(bullets[i]->getDamage());
+               removeBullet(i);
+               break;
             }
         }
     }

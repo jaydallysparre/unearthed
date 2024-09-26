@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "AIInput.h"
+#include <stack>
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
     gameCamera = window->getDefaultView();
@@ -60,11 +61,12 @@ void GameScene::draw() {
     bulletManager.display(*window);
     for (Entity* entity: entities) {
         InputHandler* IH = entity->getInputHandler();
-
-        for (AINode* n : (static_cast<AIInput*>(IH))->getNodePath()) {
+        std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();
+        while (!nodePath.empty()) {
             sf::CircleShape shape(2);
-            shape.setPosition(sf::Vector2f(n->x*32+16, n->y*32+16));
+            shape.setPosition(sf::Vector2f(nodePath.top()->x*32+16, nodePath.top()->y*32+16));
             window->draw(shape);
+            nodePath.pop();
         }
         entity->display(*window);
     }
