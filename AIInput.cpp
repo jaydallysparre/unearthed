@@ -66,12 +66,9 @@ std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
         
         if (current->x == end.x && current->y == end.y) { // goal reached
             std::stack<AINode*> path;
-            int l = 0;
             while (current != nullptr) {
                 path.push(current);
                 current = current->parent;
-                l++;
-                std::cout << l << '\n';
             }
             return path;
         }

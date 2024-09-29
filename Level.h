@@ -7,7 +7,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <limits>
-
+#include "Entity/EnemyType.h"
+#include <utility>
 
 struct AINode {
     AINode(int x, int y, bool traversable) : x(x), y(y), traversable(traversable) {}
@@ -34,23 +35,19 @@ private:
     std::vector<std::vector<int>> level;
     std::vector<std::vector<int>> collisionMap; // entities's positions are projected onto this for collisions
     std::vector<int> collidableTiles; // allow map maker to define which tiles are collidable on level creation
-    std::vector<std::vector<AINode>> nodeMap; // AI uses this for A* pathfinding
     sf::Texture spritesheet;
     int tileSize;
+    std::vector<EnemyType::Enemy> allowedEnemies;
 public:
     Level();
-    Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles);
+    Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles, std::vector<EnemyType::Enemy> allowedEnemies);
     bool loadSpriteSheet(std::string filename, int tileSize);
     bool loadFromFile(std::string filename);
     int getTileSize();
     std::vector<std::vector<int>> generateCollisionMap();
     std::vector<std::vector<int>> getCollisionMap();
-
-    // Pathfinding helper methods
-    std::vector<std::vector<AINode>> generateNodeMap();
-    std::vector<std::vector<AINode>> getNodeMap();
-    std::vector<AINode*> getNeighbours(AINode* node);
-
+    std::vector<EnemyType::Enemy> getAllowedEnemys();
+    std::pair<int, int> getOpenSquare(); // get a tile that is not a wall.
     void display(sf::RenderWindow& window);
 };
 

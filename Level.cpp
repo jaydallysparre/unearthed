@@ -1,8 +1,10 @@
 #include "Level.h"
+#include <random>
+#include <chrono>
 
 Level::Level() {}
 
-Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles) : collidableTiles(collidableTiles) {
+Level::Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles, std::vector<EnemyType::Enemy> allowedEnemies) : collidableTiles(collidableTiles), allowedEnemies(allowedEnemies) {
     loadFromFile(lvlFilename);
     loadSpriteSheet(spriteFilename, tileSize);
     generateCollisionMap();
@@ -59,6 +61,26 @@ std::vector<std::vector<int>> Level::generateCollisionMap() {
 
 std::vector<std::vector<int>> Level::getCollisionMap() {
     return collisionMap;
+}
+
+std::vector<EnemyType::Enemy> Level::getAllowedEnemys() {
+    return allowedEnemies;
+}
+
+std::pair<int, int> Level::getOpenSquare() {
+    std::pair<int, int> square{-1, -1};
+    std::mt19937 mt{std::random_device{}()};
+    std::uniform_int_distribution row{0, (int)collisionMap.size()-1};
+    std::uniform_int_distribution col{0, (int)collisionMap[0].size()-1};
+    while (square.first < 0) {
+        int r = row(mt);
+        int c = col(mt);
+        if (collisionMap[r][c] == 0) {
+            square.first = r;
+            square.second = c;
+        }
+    }
+    return square;
 }
 
 void Level::display(sf::RenderWindow& window) {

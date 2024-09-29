@@ -4,6 +4,7 @@
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
     gameCamera = window->getDefaultView();
+    director = new Director(this);
 }
 
 GameScene::~GameScene() {
@@ -35,6 +36,10 @@ Level* GameScene::getLevel() {
     return &level;
 }
 
+Entity* GameScene::getPlayer() {
+    return player;
+}
+
 void GameScene::handleEvent(sf::Event event) {
     if (event.type == sf::Event::Resized) {
         gameCamera = sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height));
@@ -46,7 +51,7 @@ void GameScene::update(float dt) {
     gameCamera.setCenter(player->getOrigin());
     window->setView(gameCamera);
     player->update(*window, level, dt);
-
+    director->update();
     for (int i = 0; i < entities.size(); ++i) {
         entities[i]->update(*window, level, dt);
         if (entities[i]->isDead()) {

@@ -2,7 +2,7 @@
 #include "MathUtil.h"
 
 Entity::Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : inputHandler(inputHandler), team(team) {
-    sprite.move(spawnPos);
+    sprite.setPosition(spawnPos);
 }
 
 Entity::~Entity() {
