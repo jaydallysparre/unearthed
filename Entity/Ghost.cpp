@@ -8,5 +8,7 @@ Ghost::Ghost(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team, Bulle
     bulletSpeed = 150;
     attackDelay = 0.6;
     health = 100;
+    maxHealth = 100;
+    regen = 1;
     damage = 30;
 }

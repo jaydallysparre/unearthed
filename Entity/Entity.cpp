@@ -3,10 +3,12 @@
 
 Entity::Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : inputHandler(inputHandler), team(team) {
     sprite.setPosition(spawnPos);
+    healthbar = new Healthbar(0.25, sf::Vector2f(spawnPos.x, spawnPos.y-15));
 }
 
 Entity::~Entity() {
     delete inputHandler;
+    delete healthbar;
 }
 
 void Entity::move(sf::Vector2f direction, Level& level, float dt) {
@@ -35,6 +37,14 @@ int Entity::getValue() {
     return value;
 }
 
+int Entity::getHealth() {
+    return health;
+}
+
+int Entity::getMaxHealth() {
+    return maxHealth;
+}
+
 bool Entity::isDead() {
     return health <= 0;
 }
@@ -52,6 +62,10 @@ void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
 
 void Entity::display(sf::RenderWindow& window) {
     window.draw(sprite);
+    if (health < maxHealth && team == Team::ENEMY) {
+        float healthFactor = (float)health/maxHealth;
+        healthbar->draw(sf::Vector2f(getOrigin().x - healthbar->getSize().x/2, getOrigin().y - 30), healthFactor, window);
+    }
 }
 
 bool Entity::isColliding(Level& level) {
@@ -88,7 +102,7 @@ InputHandler* Entity::getInputHandler() {
 
 sf::Vector2f Entity::getPosition() {
     return sprite.getPosition();
-}
+}   
 
 sf::Vector2f Entity::getOrigin() {
     sf::FloatRect hitbox = sprite.getGlobalHitbox();
@@ -96,6 +110,11 @@ sf::Vector2f Entity::getOrigin() {
 }
 
 void Entity::update(sf::RenderWindow& window, Level& level, float dt) {
+    if (regenTimer.getElapsedTime().asSeconds() > 1) {
+        if (health+regen <= maxHealth) {
+            health += regen;
+        }
+        regenTimer.restart();
+    }
     listenToInput(dt, level, window);
-    display(window);
 }

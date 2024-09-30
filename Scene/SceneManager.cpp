@@ -17,7 +17,6 @@ void SceneManager::handleEvents(sf::RenderWindow& window, sf::Event event) {
 
 void SceneManager::runScene(float dt) {
     currentScene->update(dt);
-    currentScene->draw();
 }
 
 void SceneManager::drawScene() {

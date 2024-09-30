@@ -17,11 +17,7 @@ int main() {
 
     GameScene* game = new GameScene(&window, Level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}));
     Entity* player = new Commando(new KBMInput(), sf::Vector2f(64.f, 64.f), Team::ALLY, game->getBulletManager());
-    //Entity* enemy = new Ghost(new AIInput(player, game->getLevel()), sf::Vector2f(128.f, 128.f), Team::ENEMY, game->getBulletManager());
-    //Entity* enemy2 = new Ghost(new AIInput(player, game->getLevel()), sf::Vector2f(128.f, 256.f), Team::ENEMY, game->getBulletManager());
     game->addPlayer(player);
-    //game->addEnemy(enemy);
-    //game->addEnemy(enemy2);
     SceneManager sceneManager(game);
 
     while (window.isOpen()) {

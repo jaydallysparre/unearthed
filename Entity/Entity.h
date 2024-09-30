@@ -8,6 +8,7 @@
 #include <vector>
 #include <array>
 #include "Level.h"
+#include "Healthbar.h"
 
 enum class Team {
     ALLY,
@@ -17,6 +18,8 @@ enum class Team {
 class Entity {
 protected:
     int health;
+    int maxHealth;
+    int regen;
     int damage;
     int speed;
     int value; // dollar value to give to player
@@ -24,11 +27,14 @@ protected:
     bool canAttack = true;
     float attackDelay = 0.3;
     sf::Clock attackTimer;
-    sf::Vector2f velocity;
+    sf::Clock regenTimer;
+    sf::Vector2f velocity;;
     InputHandler* inputHandler;
     Team team;
     sf::Texture spriteTexture;
     HBSprite sprite;
+    Healthbar* healthbar;
+    bool showHealthbar;
     Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
 public:
     virtual ~Entity();
@@ -36,6 +42,8 @@ public:
     void virtual attack(sf::Vector2f attackDir) = 0;
     void virtual takeDamage(int dmgAmount);
     int getValue();
+    int getHealth();
+    int getMaxHealth();
     bool isDead();
     void listenToInput(float dt, Level& level, sf::RenderWindow& window);
     void display(sf::RenderWindow& window);

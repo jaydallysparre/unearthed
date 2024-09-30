@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "BulletManager.h"
 #include "Director.h"
+#include "HUD.h"
 
 class Director;
 
@@ -16,8 +17,11 @@ private:
     Director* director;
     int playerMoney = 0;
     sf::View gameCamera;
+    sf::View uiView;
     std::vector<Entity*> entities;
     BulletManager bulletManager;
+    sf::Clock directorTimer; 
+    HUD hud;
 public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();

@@ -43,25 +43,30 @@ Entity* GameScene::getPlayer() {
 void GameScene::handleEvent(sf::Event event) {
     if (event.type == sf::Event::Resized) {
         gameCamera = sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height));
+        uiView = sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height));
         gameCamera.zoom(0.75);  
     }
 }
 
 void GameScene::update(float dt) {
+    window->setView(gameCamera); // player input relies on view being set
     gameCamera.setCenter(player->getOrigin());
-    window->setView(gameCamera);
     player->update(*window, level, dt);
-    director->update();
+    if (directorTimer.getElapsedTime().asSeconds() > 1) {
+        director->update();
+        directorTimer.restart();
+    }
     for (int i = 0; i < entities.size(); ++i) {
         entities[i]->update(*window, level, dt);
         if (entities[i]->isDead()) {
             killEntity(i);
         }
     }
-    bulletManager.update(level, entities, dt);
+    bulletManager.update(level, entities, player, dt);
 }
 
 void GameScene::draw() {
+    window->setView(gameCamera);
     level.display(*window);
     bulletManager.display(*window);
     for (Entity* entity: entities) {
@@ -76,5 +81,7 @@ void GameScene::draw() {
         entity->display(*window);
     }
     player->display(*window);
+    window->setView(uiView);
+    hud.drawHUD((float)player->getHealth()/player->getMaxHealth(), playerMoney, *window);
 }
 
