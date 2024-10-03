@@ -45,7 +45,7 @@ std::vector<std::vector<int>> Level::generateCollisionMap() {
         for (int j = 0; j < level[i].size(); ++j) {
             bool isCollidable = false;
             for (int tile = 0; tile < collidableTiles.size(); ++tile) {
-                if (collidableTiles[tile] == level[i][j]) {
+                if (collidableTiles[tile] == level[i][j] || level[i][j] == 9) {
                     collisionMap[i].push_back(1);
                     isCollidable = true;
                     break;
@@ -87,7 +87,7 @@ void Level::display(sf::RenderWindow& window) {
     for (int i = 0; i < level.size(); ++i) {
         for (int j = 0; j < level[i].size(); ++j) {
             int sIdx = level[i][j]; // sprite index
-            if (sIdx != -1) {
+            if (sIdx != 9) { // 9 is designated empty space tile
                 sf::VertexArray tile(sf::TriangleStrip, 4);
                 int xOff = j*tileSize;
                 int yOff = i*tileSize;
