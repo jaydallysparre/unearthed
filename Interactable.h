@@ -3,7 +3,7 @@
 
 class Interactable {
 public:
-    virtual void use();
+    virtual void use() = 0;
 };
 
 #endif
