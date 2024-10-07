@@ -22,6 +22,9 @@ void SceneManager::handleEvents(sf::RenderWindow& window, sf::Event event) {
 
 void SceneManager::runScene(float dt) {
     currentScene->update(dt);
+    if (currentScene->getTransitionScene()) { // change schene if currentScene creates a transition scene
+        switchScene(currentScene->getTransitionScene());
+    }
 }
 
 void SceneManager::drawScene() {

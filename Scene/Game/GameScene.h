@@ -2,6 +2,7 @@
 #define GAMESCENE_H
 
 #include "Scene.h"
+#include "MenuScene.h"
 #include "Level.h"
 #include "Entity.h"
 #include "BulletManager.h"

@@ -1,4 +1,4 @@
-FILES =	${wildcard *.cpp} ${wildcard Entity/*.cpp} ${wildcard Entity/Input/*.cpp} ${wildcard Scene/*.cpp} ${wildcard Scene/Game/*.cpp} ${wildcard UI/*.cpp} 
+FILES =	${wildcard *.cpp} ${wildcard Entity/*.cpp} ${wildcard Entity/Input/*.cpp} ${wildcard Scene/*.cpp} ${wildcard Scene/Game/*.cpp} ${wildcard Scene/Menu/*.cpp} ${wildcard UI/*.cpp} 
 
 FLAGS = -IEntity -IScene -IEntity/Input -IUI -IScene/Game -IScene/Menu -I.
 

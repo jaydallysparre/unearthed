@@ -12,6 +12,7 @@ GameScene::~GameScene() {
     for (Entity* e: entities) {
         delete e;
     }
+    delete director;
 }
 
 void GameScene::addPlayer(Entity* player) {
@@ -49,6 +50,10 @@ void GameScene::handleEvent(sf::Event event) {
 }
 
 void GameScene::update(float dt) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        transitionScene = new MenuScene(window);
+        return;
+    }
     window->setView(gameCamera); // player input relies on view being set
     gameCamera.setCenter(player->getOrigin());
     player->update(*window, level, dt);

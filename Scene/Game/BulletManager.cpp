@@ -1,5 +1,11 @@
 #include "BulletManager.h"
 
+BulletManager::~BulletManager() {
+    for (Bullet* bullet : bullets) {
+        delete bullet;
+    }
+}
+
 void BulletManager::addBullet(Bullet* bullet) {
     bullets.push_back(bullet);
 }
