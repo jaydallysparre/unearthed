@@ -2,7 +2,12 @@
 
 SceneManager::SceneManager(Scene* scene) : currentScene(scene) {}
 
+SceneManager::~SceneManager() {
+    delete currentScene;
+}
+
 void SceneManager::switchScene(Scene* scene) {
+    delete currentScene;
     currentScene = scene;
 }
 

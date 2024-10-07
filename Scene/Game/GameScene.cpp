@@ -73,7 +73,7 @@ void GameScene::draw() {
         InputHandler* IH = entity->getInputHandler();
         std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();
         while (!nodePath.empty()) {
-            sf::CircleShape shape(2);
+            sf::CircleShape shape(1);
             shape.setPosition(sf::Vector2f(nodePath.top()->x*32+16, nodePath.top()->y*32+16));
             window->draw(shape);
             nodePath.pop();

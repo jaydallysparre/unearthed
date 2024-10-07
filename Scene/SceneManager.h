@@ -8,6 +8,7 @@ private:
     Scene* currentScene;
 public:
     SceneManager(Scene* scene);
+    ~SceneManager();
     void switchScene(Scene* scene);
     void handleEvents(sf::RenderWindow& window, sf::Event event);
     void runScene(float dt); 

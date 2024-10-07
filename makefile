@@ -1,6 +1,6 @@
 FILES =	${wildcard *.cpp} ${wildcard Entity/*.cpp} ${wildcard Entity/Input/*.cpp} ${wildcard Scene/*.cpp} ${wildcard Scene/Game/*.cpp} ${wildcard UI/*.cpp} 
 
-FLAGS = -IEntity -IScene -IEntity/Input -IUI -IScene/Game -I.
+FLAGS = -IEntity -IScene -IEntity/Input -IUI -IScene/Game -IScene/Menu -I.
 
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
