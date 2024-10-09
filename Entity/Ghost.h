@@ -5,7 +5,7 @@
 
 class Ghost : public RangedEntity {
 public:
-    Ghost(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team, BulletManager* bulletManger);
+    Ghost(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team, BulletManager* bulletManger, float timeFactor);
 };
 
 #endif

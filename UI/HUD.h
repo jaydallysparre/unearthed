@@ -12,11 +12,12 @@ private:
     std::priority_queue<Alert, std::vector<Alert>, std::greater<Alert>> alerts;
     sf::Text alertText;
     sf::Clock alertTimer;
+    sf::Text healthbarText;
 public:
     HUD();
     ~HUD();
     void addAlert(Alert alert);
-    void drawHUD(float healthFactor, int money, sf::RenderWindow& window);
+    void drawHUD(int playerHealth, int playerMaxHealth, int money, sf::RenderWindow& window);
 };
 
 #endif

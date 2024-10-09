@@ -4,6 +4,7 @@
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
     gameCamera = window->getView();
+    uiView = window->getView();
     gameCamera.zoom(0.75);
     director = new Director(this);
     director->populateStage();
@@ -133,6 +134,6 @@ void GameScene::draw() {
     }
     player->display(*window);
     window->setView(uiView);
-    hud.drawHUD((float)player->getHealth()/player->getMaxHealth(), playerMoney, *window);
+    hud.drawHUD(player->getHealth(), player->getMaxHealth(), playerMoney, *window);
 }
 

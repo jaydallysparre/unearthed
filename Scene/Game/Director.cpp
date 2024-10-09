@@ -1,5 +1,6 @@
 #include "Director.h"
 #include <random>
+#include <cmath>
 
 Director::Director(GameScene* gamescene) :gamescene(gamescene){
     std::cout << "INIT CREDITS = " << enemyCredits << '\n';
@@ -21,9 +22,11 @@ void Director::spawnEnemy(EnemyType::Enemy enemy) {
     int tilesize = level->getTileSize();
     coordinates.first *= tilesize;
     coordinates.second *= tilesize;
+
+    float timeFactor = std::log(gamescene->getGameTimer().getElapsedTime().asSeconds()/120 + 1)+1; // factor for scaling enemies
     switch (enemy) {
         case EnemyType::Enemy::Ghost:
-            enemyEntity = new Ghost(new AIInput(gamescene->getPlayer(), gamescene->getLevel()), sf::Vector2f(coordinates.second, coordinates.first), Team::ENEMY, gamescene->getBulletManager());
+            enemyEntity = new Ghost(new AIInput(gamescene->getPlayer(), gamescene->getLevel()), sf::Vector2f(coordinates.second, coordinates.first), Team::ENEMY, gamescene->getBulletManager(), timeFactor);
             break;
     }
     std::cout << "Enemy spawned at " << coordinates.first << ", " << coordinates.second << '\n';
@@ -57,7 +60,7 @@ void Director::spendCredits() {
 }
 
 void Director::updateCredits() {
-    enemyCredits += 2;
+    enemyCredits += 2 + (gamescene->getGameTimer().getElapsedTime().asSeconds()/60);
     std::cout << "credits after update = " << enemyCredits << '\n';
 }
 
