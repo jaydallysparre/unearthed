@@ -6,7 +6,12 @@ Director::Director(GameScene* gamescene) :gamescene(gamescene){
 }
 
 void Director::populateStage() {
-
+    stageCredits = 7;// + (gamescene->getGameTimer().getElapsedTime().asSeconds()/60);
+    for (int i = 0; i < stageCredits; ++i) {
+        std::pair<int,int> square = gamescene->getLevel()->getOpenSquare();
+        Chest* chest = new Chest(sf::Vector2f(square.second*32, square.first*32));
+        gamescene->addInteractable(chest);
+    }
 }
 
 void Director::spawnEnemy(EnemyType::Enemy enemy) {
@@ -57,6 +62,11 @@ void Director::updateCredits() {
 }
 
 void Director::update() {
+    if (chestSpawnTimer.getElapsedTime().asSeconds() > 45) {
+        populateStage();
+        gamescene->sendHudAlert(Alert("New wave of chests spawned!", 2));
+        chestSpawnTimer.restart();
+    }
     if (directorTimer.getElapsedTime().asSeconds() > 8) {
         directorTimer.restart();
         updateCredits();

@@ -9,11 +9,14 @@ class GameScene;
 #include "GameScene.h"
 #include "Ghost.h"
 #include "AIInput.h"
+#include "Interactable.h"
+#include "Chest.h"
 
 class Director {
 private:
     GameScene* gamescene;
     sf::Clock directorTimer;
+    sf::Clock chestSpawnTimer;
     int enemyCredits = 0;
     int stageCredits;
 public:

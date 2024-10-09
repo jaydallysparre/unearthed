@@ -9,6 +9,7 @@
 #include "Director.h"
 #include "HUD.h"
 #include "Interactable.h"
+#include "Alert.h"
 
 class Director;
 
@@ -22,8 +23,10 @@ private:
     sf::View uiView;
     std::vector<Entity*> entities;
     std::vector<Interactable*> interactables;
+    //std::vector<> worldItems;
     BulletManager bulletManager;
     sf::Clock directorTimer; 
+    sf::Clock gameTimer;
     HUD hud;
 public:
     GameScene(sf::RenderWindow* window, Level level);
@@ -32,12 +35,15 @@ public:
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
     void addInteractable(Interactable* interactable);
+    void sendHudAlert(Alert alert);
     void killEntity(int idx);
+    void removeInteractable(int idx);
 
     void setDirector(Director* director);
     Level* getLevel();
     Entity* getPlayer();
-    Interactable* getClosestValidInteractable(); // gets the closest valid interactable to the player
+    sf::Clock getGameTimer();
+    int getClosestValidInteractable(); // gets the closest valid interactable to the player
 
     void handleEvent(sf::Event event); 
     void update(float dt);

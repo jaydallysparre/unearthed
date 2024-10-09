@@ -3,14 +3,19 @@
 #include <stack>
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
-    gameCamera = window->getDefaultView();
+    gameCamera = window->getView();
+    gameCamera.zoom(0.75);
     director = new Director(this);
+    director->populateStage();
 }
 
 GameScene::~GameScene() {
     delete player;
     for (Entity* e: entities) {
         delete e;
+    }
+    for (Interactable* i: interactables) {
+        delete i;
     }
     delete director;
 }
@@ -23,10 +28,23 @@ void GameScene::addEnemy(Entity* enemy) {
     entities.push_back(enemy);
 }
 
+void GameScene::addInteractable(Interactable* interactable) {
+    interactables.push_back(interactable);
+}
+
+void GameScene::sendHudAlert(Alert alert) {
+    hud.addAlert(alert);
+}
+
 void GameScene::killEntity(int idx) {
     playerMoney += entities[idx]->getValue();
     delete entities[idx];
     entities.erase(entities.begin() + idx);
+}
+
+void GameScene::removeInteractable(int idx) {
+    delete interactables[idx];
+    interactables.erase(interactables.begin() + idx);
 }
 
 BulletManager* GameScene::getBulletManager() {
@@ -39,6 +57,26 @@ Level* GameScene::getLevel() {
 
 Entity* GameScene::getPlayer() {
     return player;
+}
+
+sf::Clock GameScene::getGameTimer() {
+    return gameTimer;
+}
+
+int GameScene::getClosestValidInteractable() {
+    float distance = std::numeric_limits<float>::infinity();
+    int idx = -1;
+    for (int i = 0; i < interactables.size(); ++i) {
+        interactables[i]->setHighlight(false);
+        float currentDistance = MathUtil<sf::Vector2f>::distance(interactables[i]->getPosition(), player->getPosition());
+        if (currentDistance < 50 && currentDistance < distance) {
+            distance = currentDistance;
+            idx = i;
+            interactables[i]->setHighlight(true);
+            hud.addAlert(Alert("Chest: Click E to open.", 0, 1));
+        }
+    }
+    return idx;
 }
 
 void GameScene::handleEvent(sf::Event event) {
@@ -67,6 +105,11 @@ void GameScene::update(float dt) {
             killEntity(i);
         }
     }
+    int closestInteractableIdx = getClosestValidInteractable();
+    if ((closestInteractableIdx != -1) && sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+        hud.addAlert(interactables[closestInteractableIdx]->use(player));
+        removeInteractable(closestInteractableIdx);
+    }
     bulletManager.update(level, entities, player, dt);
 }
 
@@ -84,6 +127,9 @@ void GameScene::draw() {
             nodePath.pop();
         }
         entity->display(*window);
+    }
+    for (Interactable* interactable : interactables) {
+        interactable->display(*window);
     }
     player->display(*window);
     window->setView(uiView);

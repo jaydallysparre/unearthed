@@ -49,6 +49,30 @@ bool Entity::isDead() {
     return health <= 0;
 }
 
+void Entity::upgradeMaxHealth(int amount) {
+    maxHealth += amount;
+}
+
+void Entity::upgradeAttackSpeed(float amount) {
+    attackDelay -= amount;
+}
+
+void Entity::upgradeAttackDamage(int amount) {
+    damage += amount;
+}
+
+void Entity::upgradeRegen(int amount) {
+    regen += amount;
+}
+
+void Entity::upgradeSpeed(int amount) {
+    speed += amount;
+}
+
+void Entity::healToFull() {
+    health = maxHealth;
+}
+
 void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
     inputHandler->handleInputs(getOrigin(), window);
     if (inputHandler->isMoving() && canMove) {

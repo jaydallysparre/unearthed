@@ -120,7 +120,7 @@ void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) 
 
         moveDir = getNodeDirection(entityOrigin, *path.top());
         sf::Vector2f nextNode(path.top()->x*32+16, path.top()->y*32+16);
-        if (MathUtil<sf::Vector2f>::distance(entityOrigin, nextNode) <= 32) {
+        if (MathUtil<sf::Vector2f>::distance(entityOrigin, nextNode) <= 16) {
             path.pop();
         }
         move = true;
