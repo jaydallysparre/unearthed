@@ -7,6 +7,7 @@ MenuScene::MenuScene(sf::RenderWindow* window) : Scene(window) {
         std::cerr << "Font could not be loaded" << '\n';
     }
     buttons.push_back(Button("Start Game", sf::Vector2f(window->getSize().x/2 - 100,200), sf::Vector2f(200,50), font, [this]{startGame();}));
+    buttons.push_back(Button("Exit", sf::Vector2f(window->getSize().x/2-100,270), sf::Vector2f(200,50), font, [window]{window->close();}));
 }
 
 MenuScene::~MenuScene() {

@@ -16,12 +16,7 @@ int main() {
     Level level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}); 
     sf::RenderWindow window(sf::VideoMode(800,600), "SFML Project");
     sf::Clock deltaClock;
-    /*
-    GameScene* game = new GameScene(&window, Level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}));
-    Entity* player = new Commando(new KBInput(), sf::Vector2f(64.f, 64.f), Team::ALLY, game->getBulletManager());
-    game->addPlayer(player);
-    SceneManager sceneManager(game);
-    */
+
     MenuScene* menu = new MenuScene(&window);
     SceneManager sceneManager(menu);
     while (window.isOpen()) {
