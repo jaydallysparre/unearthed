@@ -3,7 +3,6 @@
 #include <cmath>
 
 Director::Director(GameScene* gamescene) :gamescene(gamescene){
-    std::cout << "INIT CREDITS = " << enemyCredits << '\n';
 }
 
 void Director::populateStage() {

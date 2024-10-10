@@ -74,7 +74,9 @@ int GameScene::getClosestValidInteractable() {
             distance = currentDistance;
             idx = i;
             interactables[i]->setHighlight(true);
-            hud.addAlert(Alert("Chest: Click E to open.", 0, 1));
+            if (!hud.currentAlertIsHighPriority()) {
+                hud.addAlert(Alert("Chest: Click E to open.", 0, 1));
+            }
         }
     }
     return idx;
@@ -119,13 +121,16 @@ void GameScene::draw() {
     level.display(*window);
     bulletManager.display(*window);
     for (Entity* entity: entities) {
-        InputHandler* IH = entity->getInputHandler();
-        std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();
-        while (!nodePath.empty()) {
-            sf::CircleShape shape(1);
-            shape.setPosition(sf::Vector2f(nodePath.top()->x*32+16, nodePath.top()->y*32+16));
-            window->draw(shape);
-            nodePath.pop();
+        if (debug) {
+            // Display pathfinding paths
+            InputHandler* IH = entity->getInputHandler();
+            std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();
+            while (!nodePath.empty()) {
+                sf::CircleShape shape(1);
+                shape.setPosition(sf::Vector2f(nodePath.top()->x*32+16, nodePath.top()->y*32+16));
+                window->draw(shape);
+                nodePath.pop();
+            }
         }
         entity->display(*window);
     }

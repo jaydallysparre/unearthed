@@ -13,6 +13,7 @@ protected:
 public:
     virtual ~RangedEntity() = default;
     void attack(sf::Vector2f attackDir) {
+        std::cout << attackDir.x << "," << attackDir.y << '\n';
         Bullet* bullet = new Bullet(attackDir, getOrigin(), team, damage, bulletSpeed);
         bulletManager->addBullet(bullet);
     }

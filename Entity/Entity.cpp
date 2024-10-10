@@ -30,7 +30,6 @@ void Entity::move(sf::Vector2f direction, Level& level, float dt) {
 
 void Entity::takeDamage(int dmgAmount) {
     health -= dmgAmount;
-    std::cout << "took " << dmgAmount << "dmg, current health = " << health << "\n";
 }
 
 int Entity::getValue() {

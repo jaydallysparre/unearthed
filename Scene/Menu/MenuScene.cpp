@@ -6,8 +6,28 @@ MenuScene::MenuScene(sf::RenderWindow* window) : Scene(window) {
     if (!font->loadFromFile("Font/Pixellari.ttf")) {
         std::cerr << "Font could not be loaded" << '\n';
     }
-    buttons.push_back(Button("Start Game", sf::Vector2f(window->getSize().x/2 - 100,200), sf::Vector2f(200,50), font, [this]{startGame();}));
-    buttons.push_back(Button("Exit", sf::Vector2f(window->getSize().x/2-100,270), sf::Vector2f(200,50), font, [window]{window->close();}));
+
+    if (!menuTitleTexture.loadFromFile("unearthed.png")) {
+        std::cerr << "Image could not be loaded" << '\n';
+    }
+
+    sf::Vector2f windowCenter = window->getView().getCenter();
+
+    menuTitle.setTexture(menuTitleTexture);
+    menuTitle.setOrigin(menuTitle.getLocalBounds().width/2, 0);
+    menuTitle.setPosition(windowCenter.x,0);
+    // Adding buttons to the screen. Buttons functions are passed through the constructor as lambda expressions.
+    int buttonStart = 240;
+    buttons.push_back(Button("Start Game", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart), sf::Vector2f(buttonWidth,70), font, [this] {
+        startGame();
+    }));
+    buttons.push_back(Button("Input Type", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+100), sf::Vector2f(buttonWidth,70), font, [this] {
+        this->buttons[1].setString(toggleInputType());
+        this->buttons[1].resetOrigin();
+    }));
+    buttons.push_back(Button("Exit", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+2*100), sf::Vector2f(buttonWidth,70), font, [window] {
+        window->close();
+    }));
 }
 
 MenuScene::~MenuScene() {
@@ -32,11 +52,21 @@ void MenuScene::startGame() {
     transitionScene = game;
 }
 
+std::string MenuScene::toggleInputType() {
+    if (inputType == KBM) {
+        inputType = KB;
+        return "WASD/ARROW KEYS";
+    } else {
+        inputType = KBM;
+        return "WASD/MOUSE";
+    }
+}
+
 void MenuScene::handleEvent(sf::Event event) {
     if (event.type == sf::Event::Resized) {
         window->setView(sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height)));
         for (Button& button : buttons) {
-            button.setPosition(sf::Vector2f(window->getSize().x/2-100, button.getPosition().y));
+            button.setPosition(sf::Vector2f(window->getView().getCenter().x-buttonWidth/2, button.getPosition().y));
         }
     }
 }
@@ -53,4 +83,6 @@ void MenuScene::draw() {
     for (Button button : buttons) {
         button.draw(*window);
     }
+    menuTitle.setPosition(window->getSize().x/2,0);
+    window->draw(menuTitle);
 }

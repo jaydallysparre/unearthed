@@ -23,8 +23,14 @@ void HUD::addAlert(Alert alert) {
     alerts.emplace(alert);
 }
 
+bool HUD::currentAlertIsHighPriority() {
+    if (alerts.empty()) {
+        return false;
+    }
+    return alerts.top().getPriority() == 0;
+}
+
 void HUD::drawHUD(int playerHealth, int playerMaxHealth, int money, sf::RenderWindow& window) {
-    std::cout << alerts.size() << '\n';
     if (!alerts.empty()) {
         alertText.setString(alerts.top().getText());
         alertText.setOrigin(sf::Vector2f(alertText.getLocalBounds().width/2, alertText.getLocalBounds().height/2));

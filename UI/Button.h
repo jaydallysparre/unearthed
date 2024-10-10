@@ -11,9 +11,12 @@ private:
     sf::RectangleShape body;
     sf::FloatRect hitbox;
     sf::Text text;
+    sf::Clock buttonTimer;
 public:
     Button(std::string text, sf::Vector2f position, sf::Vector2f size, sf::Font* font, std::function<void()> action);
     void setPosition(sf::Vector2f position);
+    void setString(std::string string);
+    void resetOrigin();
     sf::Vector2f getPosition();
     bool contains(sf::Vector2f point);
     void press();

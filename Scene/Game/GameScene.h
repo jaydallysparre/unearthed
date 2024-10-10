@@ -15,6 +15,7 @@ class Director;
 
 class GameScene : public Scene {
 private:
+    bool debug = false;
     Level level;
     Entity* player;
     Director* director;
@@ -23,7 +24,6 @@ private:
     sf::View uiView;
     std::vector<Entity*> entities;
     std::vector<Interactable*> interactables;
-    //std::vector<> worldItems;
     BulletManager bulletManager;
     sf::Clock directorTimer; 
     sf::Clock gameTimer;

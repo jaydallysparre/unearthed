@@ -19,11 +19,14 @@ private:
     std::vector<Button> buttons;
     sf::Font* font;
     Input inputType = KBM;
-    
+    int buttonWidth = 300;
+    sf::Texture menuTitleTexture;
+    sf::Sprite menuTitle;
 public:
     MenuScene(sf::RenderWindow* window);
     ~MenuScene();
     void startGame();
+    std::string toggleInputType();
     void handleEvent(sf::Event event);
     void update(float dt);
     void draw();

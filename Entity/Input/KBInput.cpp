@@ -1,4 +1,5 @@
 #include "KBInput.h"
+#include <iostream>
 
 void KBInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     moveDir.x = moveDir.y = 0;
