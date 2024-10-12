@@ -3,6 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 
+/*
+* Sprite with an attached hitbox.
+*/
+
 class HBSprite : public sf::Sprite {
 private:
     sf::FloatRect hitbox;

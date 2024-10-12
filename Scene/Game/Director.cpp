@@ -5,14 +5,18 @@
 Director::Director(GameScene* gamescene) :gamescene(gamescene){
 }
 
+// Populates stage with chests
+
 void Director::populateStage() {
-    stageCredits = 7;// + (gamescene->getGameTimer().getElapsedTime().asSeconds()/60);
+    stageCredits = 7;
     for (int i = 0; i < stageCredits; ++i) {
         std::pair<int,int> square = gamescene->getLevel()->getOpenSquare();
         Chest* chest = new Chest(sf::Vector2f(square.second*32, square.first*32));
         gamescene->addInteractable(chest);
     }
 }
+
+// Spawn enemy on a random level tile
 
 void Director::spawnEnemy(EnemyType::Enemy enemy) {
     Entity* enemyEntity; 
@@ -23,14 +27,17 @@ void Director::spawnEnemy(EnemyType::Enemy enemy) {
     coordinates.second *= tilesize;
 
     float timeFactor = std::log(gamescene->getGameTimer().getElapsedTime().asSeconds()/120 + 1)+1; // factor for scaling enemies
+    std::vector<sf::Texture>* textures = gamescene->getTextures();
     switch (enemy) {
         case EnemyType::Enemy::Ghost:
-            enemyEntity = new Ghost(new AIInput(gamescene->getPlayer(), gamescene->getLevel()), sf::Vector2f(coordinates.second, coordinates.first), Team::ENEMY, gamescene->getBulletManager(), timeFactor);
+            enemyEntity = new Ghost(new AIInput(gamescene->getPlayer(), gamescene->getLevel()), sf::Vector2f(coordinates.second, coordinates.first), Team::ENEMY, gamescene->getBulletManager(), timeFactor, (*textures)[0]);
             break;
     }
     std::cout << "Enemy spawned at " << coordinates.first << ", " << coordinates.second << '\n';
     gamescene->addEnemy(enemyEntity);
 }
+
+// Director spends accumulated credits on enemies
 
 void Director::spendCredits() {
     std::cout << "Spend Credits: " << enemyCredits << '\n';
@@ -58,6 +65,7 @@ void Director::spendCredits() {
     std::cout << "Credits Left:" << enemyCredits << '\n';
 }
 
+// Upgrades director credits, with the amount increasing over time
 void Director::updateCredits() {
     enemyCredits += 2 + (gamescene->getGameTimer().getElapsedTime().asSeconds()/60);
     std::cout << "credits after update = " << enemyCredits << '\n';
@@ -66,7 +74,7 @@ void Director::updateCredits() {
 void Director::update() {
     if (chestSpawnTimer.getElapsedTime().asSeconds() > 45) {
         populateStage();
-        gamescene->sendHudAlert(Alert("New wave of chests spawned!", 2));
+        gamescene->sendHudAlert(Alert("New wave of chests spawned!", 3));
         chestSpawnTimer.restart();
     }
     if (directorTimer.getElapsedTime().asSeconds() > 8) {

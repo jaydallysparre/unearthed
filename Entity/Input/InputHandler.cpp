@@ -10,10 +10,6 @@ bool InputHandler::isAttacking() {
     return attack;
 }
 
-bool InputHandler::isSpecialing() {
-    return special;
-}
-
 sf::Vector2f InputHandler::getMoveDir() {
     return moveDir;
 }

@@ -4,6 +4,9 @@
 #include "Entity.h"
 #include "BulletManager.h"
 
+/*
+* Class specifically for ranged entities that registers bullets with the bullet manager upon being fred.
+*/
 
 class RangedEntity : public Entity {
 protected:

@@ -11,7 +11,11 @@
 #include "Interactable.h"
 #include "Alert.h"
 
-class Director;
+class Director; // Forward declaration as they rely on eachother
+
+/*
+* In charge of the game logic past the menu.
+*/
 
 class GameScene : public Scene {
 private:
@@ -23,6 +27,7 @@ private:
     sf::View gameCamera;
     sf::View uiView;
     std::vector<Entity*> entities;
+    std::vector<sf::Texture> textures;
     std::vector<Interactable*> interactables;
     BulletManager bulletManager;
     sf::Clock directorTimer; 
@@ -31,6 +36,7 @@ private:
 public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();
+    void loadEnemyTexture();
     BulletManager* getBulletManager();
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
@@ -43,6 +49,7 @@ public:
     Level* getLevel();
     Entity* getPlayer();
     sf::Clock getGameTimer();
+    std::vector<sf::Texture>* getTextures();
     int getClosestValidInteractable(); // gets the closest valid interactable to the player
 
     void handleEvent(sf::Event event); 

@@ -1,8 +1,11 @@
 #ifndef ENEMY_TYPE
 #define ENEMY_TYPE
 
+#include <SFML/Graphics.hpp>
+#include <vector>
+
 /*
-* Stores enemy types and their costs for Director
+* Stores enemy types, their costs
 */
 
 class EnemyType {

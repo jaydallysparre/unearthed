@@ -10,6 +10,10 @@
 #include "Commando.h"
 #include <vector>
 
+/*
+* Main menu scene.
+*/
+
 class MenuScene : public Scene {
 private:
     enum Input {

@@ -10,15 +10,20 @@
 #include "SceneManager.h"
 #include "GameScene.h"
 #include "MenuScene.h"
+#include "HighscoreScene.h"
 #include "EnemyType.h"
 
 int main() {
     Level level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}); 
     sf::RenderWindow window(sf::VideoMode(800,600), "SFML Project");
     sf::Clock deltaClock;
-
+    /*
     MenuScene* menu = new MenuScene(&window);
-    SceneManager sceneManager(menu);
+    SceneManager sceneManager(menu);*/
+
+    HighScoreScene* scene = new HighScoreScene(&window, true, 1000);
+    SceneManager sceneManager(scene);
+
     while (window.isOpen()) {
         // Handle SFML events (closing game, resizing window, etc)
         float dt = deltaClock.restart().asSeconds();

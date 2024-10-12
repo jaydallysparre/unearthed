@@ -6,8 +6,10 @@ GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), leve
     gameCamera = window->getView();
     uiView = window->getView();
     gameCamera.zoom(0.75);
+    loadEnemyTexture();
     director = new Director(this);
     director->populateStage();
+    loadEnemyTexture();
 }
 
 GameScene::~GameScene() {
@@ -19,6 +21,16 @@ GameScene::~GameScene() {
         delete i;
     }
     delete director;
+}
+
+void GameScene::loadEnemyTexture() {
+    sf::Texture t;
+    std::vector<std::string> texturesToOpen = {"ghost.png"};
+    for (int i = 0; i < texturesToOpen.size(); ++i) {
+        sf::Texture t;
+        t.loadFromFile(texturesToOpen[i]);
+        textures.push_back(t);
+    }
 }
 
 void GameScene::addPlayer(Entity* player) {
@@ -64,6 +76,12 @@ sf::Clock GameScene::getGameTimer() {
     return gameTimer;
 }
 
+std::vector<sf::Texture>* GameScene::getTextures() {
+    return &textures;
+}
+
+// Gets closest valid interactable, and handles highlight visual logic for it
+
 int GameScene::getClosestValidInteractable() {
     float distance = std::numeric_limits<float>::infinity();
     int idx = -1;
@@ -90,7 +108,9 @@ void GameScene::handleEvent(sf::Event event) {
     }
 }
 
+// Handles updating the game scene
 void GameScene::update(float dt) {
+    // Go to the menu if escape is pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         transitionScene = new MenuScene(window);
         return;
@@ -108,6 +128,7 @@ void GameScene::update(float dt) {
             killEntity(i);
         }
     }
+    // Interactable use logic
     int closestInteractableIdx = getClosestValidInteractable();
     if ((closestInteractableIdx != -1) && sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
         hud.addAlert(interactables[closestInteractableIdx]->use(player));
@@ -139,6 +160,6 @@ void GameScene::draw() {
     }
     player->display(*window);
     window->setView(uiView);
-    hud.drawHUD(player->getHealth(), player->getMaxHealth(), playerMoney, *window);
+    hud.drawHUD(player->getHealth(), player->getMaxHealth(), playerMoney,gameTimer.getElapsedTime().asSeconds(), *window);
 }
 

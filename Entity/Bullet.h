@@ -3,6 +3,10 @@
 
 #include "Entity.h"
 
+/*
+* Basic projectile object modelled as a point.
+*/
+
 class Bullet {
 private:
     sf::Vector2f direction;

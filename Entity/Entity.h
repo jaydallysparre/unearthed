@@ -10,10 +10,14 @@
 #include "Level.h"
 #include "Healthbar.h"
 
-enum class Team {
+enum class Team { // TO FIX
     ALLY,
     ENEMY
 };
+
+/*
+* Base abstract entity class. Contains attributes and methods that apply/could apply to all enemies.
+*/
 
 class Entity {
 protected:

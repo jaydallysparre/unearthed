@@ -22,10 +22,15 @@ void Bullet::draw(sf::RenderWindow& window) {
     window.draw(sprite);
 }
 
+// Projects bullet onto the collision map and detects if it is colliding.
+
 bool Bullet::isWorldColliding(Level& level) {
     std::vector<std::vector<int>> collisionMap = level.getCollisionMap();
     sf::Vector2f bulletPos = sprite.getPosition();
     int tileSize = level.getTileSize();
+    if (bulletPos.y < 0 || bulletPos.x < 0) {
+        return false;
+    }
     return collisionMap[bulletPos.y/tileSize][bulletPos.x/tileSize] == 1; 
 }
 

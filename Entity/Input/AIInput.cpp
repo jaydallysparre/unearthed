@@ -6,11 +6,15 @@ AIInput::AIInput(Entity* player, Level* level) : target(player), level(level) {
     generateNodeMap();
 }
 
+// Helper heuristic function for the findPath method.
+
 int AIInput::heuristic(AINode& begin, AINode& end) {
     int dx = std::abs(end.x - begin.x);
     int dy = std::abs(end.y - begin.y);
     return std::min(dx, dy) * 14 + std::abs(dx - dy) * 10;
 }
+
+// Generates a map of AI Nodes to be used by the findPath method.
 
 std::vector<std::vector<AINode>> AIInput::generateNodeMap() {
     for (int i = 0; i < level->getCollisionMap().size(); ++i) {
@@ -22,6 +26,8 @@ std::vector<std::vector<AINode>> AIInput::generateNodeMap() {
     return nodeMap;
 }
 
+// Resets the node map to default for next A* run
+
 void AIInput::resetNodeMap() {
     for (std::vector<AINode> vec : nodeMap) {
         for (AINode node : vec) {
@@ -29,6 +35,8 @@ void AIInput::resetNodeMap() {
         }
     }
 }
+
+// Gets neighbouring AINodes. Helper function for findPath
 
 std::vector<AINode*> AIInput::getNeighbours(AINode* node) {
     std::vector<AINode*> neighbours;
@@ -46,6 +54,8 @@ std::vector<AINode*> AIInput::getNeighbours(AINode* node) {
     }
     return neighbours;
 }
+
+// Finds a path to the player using the A* pathfinding algorithm.
 
 std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
     resetNodeMap();
@@ -98,6 +108,8 @@ std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
    return std::stack<AINode*>{};
 }
 
+// Returns normalized direction to the entity position relative to the AI node
+
 sf::Vector2f AIInput::getNodeDirection(sf::Vector2f entityOrigin, AINode& node) {
     return MathUtil<sf::Vector2f>::normalize(sf::Vector2f(node.x*32+16, node.y*32+16) - entityOrigin);
 }
@@ -105,6 +117,8 @@ sf::Vector2f AIInput::getNodeDirection(sf::Vector2f entityOrigin, AINode& node) 
 std::stack<AINode*> AIInput::getNodePath() {
     return path;
 }
+
+// Enemy calls pathfinding methods and attacks the player.
 
 void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     move = false;

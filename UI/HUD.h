@@ -13,12 +13,13 @@ private:
     sf::Text alertText;
     sf::Clock alertTimer;
     sf::Text healthbarText;
+    sf::Text timeText;
 public:
     HUD();
     ~HUD();
     void addAlert(Alert alert);
     bool currentAlertIsHighPriority(); // Low priority messages can avoid being added to the queue
-    void drawHUD(int playerHealth, int playerMaxHealth, int money, sf::RenderWindow& window);
+    void drawHUD(int playerHealth, int playerMaxHealth, int money, int time, sf::RenderWindow& window);
 };
 
 #endif

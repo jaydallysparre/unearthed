@@ -4,6 +4,10 @@
 #include "Bullet.h"
 #include <vector>
 
+/*
+* In charge of the bullets in the scene. Has methods for registering and removing the bullets, and updating all of them
+*/
+
 class BulletManager {
 private:
     std::vector<Bullet*> bullets;

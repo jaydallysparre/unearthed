@@ -1,6 +1,8 @@
 #include "KBInput.h"
 #include <iostream>
 
+// Gets keyboard only input and sets the movement and attack direction.
+
 void KBInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     moveDir.x = moveDir.y = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {

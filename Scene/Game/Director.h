@@ -1,7 +1,7 @@
 #ifndef DIRECTOR_H
 #define DIRECTOR_H
 
-class GameScene;
+class GameScene; // Forward declaration to avoid problems, as they rely on eachother.
 
 #include "Level.h"
 #include "EnemyType.h"
@@ -11,6 +11,10 @@ class GameScene;
 #include "AIInput.h"
 #include "Interactable.h"
 #include "Chest.h"
+
+/*
+* Director class that handles spawning entities and chests in the stage.
+*/
 
 class Director {
 private:

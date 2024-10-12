@@ -7,6 +7,8 @@ Chest::Chest(sf::Vector2f position) : Interactable(position) {
     sprite.setTexture(spriteTexture);
 }
 
+// Sets highlight, so the player knows they can interact with the chest.
+
 void Chest::setHighlight(bool highlight) {
     if (highlight) {
         sprite.setTexture(highlightTexture);
@@ -15,6 +17,8 @@ void Chest::setHighlight(bool highlight) {
         sprite.setTexture(spriteTexture);
     }
 }
+
+// Give target entity random stat upgrade.
 
 Alert Chest::use(Entity* entity) {
     std::mt19937 mt {std::random_device{}()};

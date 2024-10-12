@@ -11,15 +11,19 @@ Entity::~Entity() {
     delete healthbar;
 }
 
+// Moves enemy in direction, if collision allows for it.
+
 void Entity::move(sf::Vector2f direction, Level& level, float dt) {
     velocity.x = direction.x * speed * dt;
     velocity.y = direction.y * speed * dt;
+    // Move in x direction first, and reset if collision occurs.
     sf::Vector2f currentPosition = sprite.getPosition();
     sprite.move(velocity.x, 0);
     if (isColliding(level)) {
         sprite.setPosition(currentPosition);
-        velocity.x;
+        velocity.x = 0;
     }
+    // Now try move in y direction
     currentPosition = sprite.getPosition();
     sprite.move(0, velocity.y);
     if (isColliding(level)) {
@@ -48,6 +52,8 @@ bool Entity::isDead() {
     return health <= 0;
 }
 
+// Upgrade functions, to be stored in chests.
+
 void Entity::upgradeMaxHealth(int amount) {
     maxHealth += amount;
 }
@@ -72,6 +78,8 @@ void Entity::healToFull() {
     health = maxHealth;
 }
 
+// Listens to the input handler and perform entity actions.
+
 void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
     inputHandler->handleInputs(getOrigin(), window);
     if (inputHandler->isMoving() && canMove) {
@@ -85,12 +93,13 @@ void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
 
 void Entity::display(sf::RenderWindow& window) {
     window.draw(sprite);
-    if (health < maxHealth && team == Team::ENEMY) {
+    if (health < maxHealth && team == Team::ENEMY) { // draw local healthbar if enemy
         float healthFactor = (float)health/maxHealth;
         healthbar->draw(sf::Vector2f(getOrigin().x - healthbar->getSize().x/2, getOrigin().y - 30), healthFactor, window);
     }
 }
 
+// Project points of entity onto the collision map, to check for collision
 bool Entity::isColliding(Level& level) {
     std::vector<std::vector<int>> collisionMap = level.getCollisionMap();
     // sprite points
@@ -104,6 +113,11 @@ bool Entity::isColliding(Level& level) {
 
     int tileSize = level.getTileSize();
     for (int i = 0; i < 4; ++i) {
+        std::cout << "Enemy colliding at position" << points[i].x << "," << points[i].y << '\n';
+        if (points[i].y < 0 || points[i].x < 0) {
+            std::cerr << "ERROR INVALID LOCATION" << '\n';
+            return false;
+        }
         if (collisionMap[points[i].y/tileSize][points[i].x/tileSize] == 1) {
             return true;
         }
@@ -133,6 +147,7 @@ sf::Vector2f Entity::getOrigin() {
 }
 
 void Entity::update(sf::RenderWindow& window, Level& level, float dt) {
+    // Regen once a second
     if (regenTimer.getElapsedTime().asSeconds() > 1) {
         if (health+regen <= maxHealth) {
             health += regen;
