@@ -15,7 +15,7 @@ HUD::HUD() {
     healthbarText.setCharacterSize(16);
     healthbarText.setFillColor(sf::Color::White);
     timeText.setFont(font);
-    timeText.setCharacterSize(26);
+    timeText.setCharacterSize(40);
     timeText.setFillColor(sf::Color::White);
     healthbar = new Healthbar(1.4, sf::Vector2f(0,0));
 }
@@ -35,7 +35,7 @@ bool HUD::currentAlertIsHighPriority() {
     return alerts.top().getPriority() == 0;
 }
 
-void HUD::drawHUD(int playerHealth, int playerMaxHealth, int money, int time, sf::RenderWindow& window) {
+void HUD::drawHUD(int playerHealth, int playerMaxHealth, int time, sf::RenderWindow& window) {
     // Handle and draw alerts
     if (!alerts.empty()) {
         alertText.setString(alerts.top().getText());
@@ -64,6 +64,7 @@ void HUD::drawHUD(int playerHealth, int playerMaxHealth, int money, int time, sf
     minutes << std::setfill('0') << std::setw(2) << time/60;
     seconds << std::setfill('0') << std::setw(2) << time % 60;
     timeText.setString(minutes.str() + ":" + seconds.str());
-    timeText.setPosition(window.getSize().x-timeText.getLocalBounds().width-2,2);
+    timeText.setOrigin(timeText.getLocalBounds().width/2,0);
+    timeText.setPosition(window.getSize().x/2,2);
     window.draw(timeText);
 }

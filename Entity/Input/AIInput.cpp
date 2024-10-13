@@ -122,7 +122,11 @@ std::stack<AINode*> AIInput::getNodePath() {
 
 void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     move = false;
-    if (timer.getElapsedTime().asSeconds() > 0.5) {
+    
+    // Recalculate target based on distance between enemy and player.
+    // Enemies at a distance require less precise pathfinding than those closer
+    float calcTime = 0.5 + std::log10(MathUtil<sf::Vector2f>::distance(entityOrigin, target->getOrigin())/100 + 1);
+    if (timer.getElapsedTime().asSeconds() > calcTime) {
         AINode selfNode = AINode(entityOrigin.x/level->getTileSize(), entityOrigin.y/level->getTileSize(), true);
         AINode targetNode = AINode(target->getOrigin().x/level->getTileSize(), target->getOrigin().y/level->getTileSize(), true);
 
@@ -130,8 +134,7 @@ void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) 
         timer.restart();
     }
     
-    if (!path.empty()) {
-
+    if (!path.empty()) { // Let's go to the next node in our node path
         moveDir = getNodeDirection(entityOrigin, *path.top());
         sf::Vector2f nextNode(path.top()->x*32+16, path.top()->y*32+16);
         if (MathUtil<sf::Vector2f>::distance(entityOrigin, nextNode) <= 16) {
@@ -142,7 +145,7 @@ void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) 
     
     attack = false;
     sf::Vector2f targetOrigin = target->getOrigin();
-    if (MathUtil<sf::Vector2f>::distance(entityOrigin, targetOrigin) <= 250) {
+    if (MathUtil<sf::Vector2f>::distance(entityOrigin, targetOrigin) <= 300) {
         attack = true;
         attackDir = MathUtil<sf::Vector2f>::normalize(targetOrigin - entityOrigin);
     }

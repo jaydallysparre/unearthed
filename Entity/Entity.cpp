@@ -36,10 +36,6 @@ void Entity::takeDamage(int dmgAmount) {
     health -= dmgAmount;
 }
 
-int Entity::getValue() {
-    return value;
-}
-
 int Entity::getHealth() {
     return health;
 }
@@ -113,7 +109,6 @@ bool Entity::isColliding(Level& level) {
 
     int tileSize = level.getTileSize();
     for (int i = 0; i < 4; ++i) {
-        std::cout << "Enemy colliding at position" << points[i].x << "," << points[i].y << '\n';
         if (points[i].y < 0 || points[i].x < 0) {
             std::cerr << "ERROR INVALID LOCATION" << '\n';
             return false;

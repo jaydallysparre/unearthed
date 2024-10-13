@@ -4,6 +4,10 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+/*
+* Alerts will appear on screen to instruct and inform the player
+*/
+
 class Alert {
 private:
     std::string text;

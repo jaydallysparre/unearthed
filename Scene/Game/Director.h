@@ -11,6 +11,7 @@ class GameScene; // Forward declaration to avoid problems, as they rely on eacho
 #include "AIInput.h"
 #include "Interactable.h"
 #include "Chest.h"
+#include <queue>
 
 /*
 * Director class that handles spawning entities and chests in the stage.
@@ -23,6 +24,8 @@ private:
     sf::Clock chestSpawnTimer;
     int enemyCredits = 0;
     int stageCredits;
+    std::queue<EnemyType::Enemy> spawnQueue;
+    sf::Clock enemySpawnTimer;
 public:
     Director(GameScene* gamescene);
     void populateStage();

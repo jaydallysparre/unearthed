@@ -5,6 +5,10 @@
 #include <string>
 #include <functional>
 
+/*
+* Button on the screen, which stores a function to be triggered when clicked
+*/
+
 class Button {
 private:
     std::function<void()> action; // stores function to be triggered when button is pressed

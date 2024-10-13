@@ -26,7 +26,6 @@ protected:
     int regen;
     int damage;
     int speed;
-    int value; // dollar value to give to player
     bool canMove = true;
     bool canAttack = true;
     float attackDelay = 0.3;
@@ -46,7 +45,6 @@ public:
     void virtual attack(sf::Vector2f attackDir) = 0;
     void virtual takeDamage(int dmgAmount);
 
-    int getValue();
     int getHealth();
     int getMaxHealth();
     Team getTeam();

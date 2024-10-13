@@ -16,6 +16,7 @@ void Director::populateStage() {
     }
 }
 
+
 // Spawn enemy on a random level tile
 
 void Director::spawnEnemy(EnemyType::Enemy enemy) {
@@ -26,7 +27,7 @@ void Director::spawnEnemy(EnemyType::Enemy enemy) {
     coordinates.first *= tilesize;
     coordinates.second *= tilesize;
 
-    float timeFactor = std::log(gamescene->getGameTimer().getElapsedTime().asSeconds()/120 + 1)+1; // factor for scaling enemies
+float timeFactor = gamescene->getGameTimer().getElapsedTime().asSeconds()/120 + 1; // factor for scaling enemies
     std::vector<sf::Texture>* textures = gamescene->getTextures();
     switch (enemy) {
         case EnemyType::Enemy::Ghost:
@@ -57,7 +58,12 @@ void Director::spendCredits() {
     for (EnemyType::Enemy enemy : allowedEnemies) {
         int enemyCost = EnemyType::getCost(enemy);
         while (boolean(mt) && enemyCost <= enemyCredits) {
-            spawnEnemy(enemy);
+            if (!gamescene->isMaxCapacity()) {
+                spawnQueue.push(enemy);
+            } else {
+                // If we can't spawn an enemy, we'll hurt the player another way
+                gamescene->upgradeRandomEnemy();
+            }
             enemyCredits -= enemyCost;
         }
     }
@@ -86,5 +92,10 @@ void Director::update() {
         if (spawnThreshold(mt) > 0.4) {
             spendCredits();
         }
+    }
+    if (enemySpawnTimer.getElapsedTime().asSeconds() > 0.5 && !spawnQueue.empty()) {
+        spawnEnemy(spawnQueue.front());
+        spawnQueue.pop();
+        enemySpawnTimer.restart();
     }
 }

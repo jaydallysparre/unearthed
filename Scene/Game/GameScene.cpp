@@ -11,13 +11,17 @@ GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), leve
     director = new Director(this);
     director->populateStage();
     loadEnemyTexture();
+    enemies = new Entity*[enemyCapacity];
 }
 
 GameScene::~GameScene() {
     delete player;
-    for (Entity* e: entities) {
-        delete e;
+
+    for (int i = 0; i < enemyCount; ++i) {
+        delete enemies[i];
     }
+    delete[] enemies;
+
     for (Interactable* i: interactables) {
         delete i;
     }
@@ -40,7 +44,27 @@ void GameScene::addPlayer(Entity* player) {
 }
 
 void GameScene::addEnemy(Entity* enemy) {
-    entities.push_back(enemy);
+    if (enemyCount + 1 <= enemyCapacity) {
+        enemies[enemyCount++] = enemy;
+    }
+    else if (enemyCapacity + 10 <= maxEnemyCapacity) {
+        Entity** temp = new Entity*[enemyCapacity+10];
+        for (int i = 0; i < enemyCapacity; ++i) {
+            temp[i] = enemies[i];
+        }
+        delete[] enemies;
+        enemies = temp;
+        enemyCapacity += 10;
+        enemies[enemyCount++] = enemy;
+    }
+    else {
+        std::cerr << "Tried to spawn enemy past capacity\n";
+        delete enemy;
+    }
+}
+
+bool GameScene::isMaxCapacity() {
+    return enemyCount == maxEnemyCapacity;
 }
 
 void GameScene::addInteractable(Interactable* interactable) {
@@ -52,14 +76,34 @@ void GameScene::sendHudAlert(Alert alert) {
 }
 
 void GameScene::killEntity(int idx) {
-    playerMoney += entities[idx]->getValue();
-    delete entities[idx];
-    entities.erase(entities.begin() + idx);
+
+    delete enemies[idx];
+    for (int i = idx; i < enemyCount-1; ++i) {
+        enemies[i] = enemies[i+1];
+    }
+    enemyCount--;
 }
 
 void GameScene::removeInteractable(int idx) {
     delete interactables[idx];
     interactables.erase(interactables.begin() + idx);
+}
+
+void GameScene::upgradeRandomEnemy() {
+    std::uniform_int_distribution randomEnemy{0, enemyCount};
+    std::uniform_int_distribution randomUpgrade(1, 3);
+    Entity* enemy = enemies[randomEnemy(mt)];
+    switch (randomUpgrade(mt)) {
+        case 1:
+            enemy->upgradeAttackSpeed(0.05);
+            break;
+        case 2:
+            enemy->upgradeAttackDamage(10);
+            break;
+        case 3:
+            enemy->upgradeSpeed(10);
+            break;
+    }
 }
 
 BulletManager* GameScene::getBulletManager() {
@@ -128,9 +172,9 @@ void GameScene::update(float dt) {
         director->update();
         directorTimer.restart();
     }
-    for (int i = 0; i < entities.size(); ++i) {
-        entities[i]->update(*window, level, dt);
-        if (entities[i]->isDead()) {
+    for (int i = 0; i < enemyCount; ++i) {
+        enemies[i]->update(*window, level, dt);
+        if (enemies[i]->isDead()) {
             killEntity(i);
         }
     }
@@ -140,17 +184,17 @@ void GameScene::update(float dt) {
         hud.addAlert(interactables[closestInteractableIdx]->use(player));
         removeInteractable(closestInteractableIdx);
     }
-    bulletManager.update(level, entities, player, dt);
+    bulletManager.update(level, enemies, enemyCount, player, dt);
 }
 
 void GameScene::draw() {
     window->setView(gameCamera);
     level.display(*window);
     bulletManager.display(*window);
-    for (Entity* entity: entities) {
+
+    for (int i = 0; i < enemyCount; ++i) {
         if (debug) {
-            // Display pathfinding paths
-            InputHandler* IH = entity->getInputHandler();
+            InputHandler* IH = enemies[i]->getInputHandler();
             std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();
             while (!nodePath.empty()) {
                 sf::CircleShape shape(1);
@@ -159,13 +203,14 @@ void GameScene::draw() {
                 nodePath.pop();
             }
         }
-        entity->display(*window);
+        enemies[i]->display(*window);
     }
+
     for (Interactable* interactable : interactables) {
         interactable->display(*window);
     }
     player->display(*window);
     window->setView(uiView);
-    hud.drawHUD(player->getHealth(), player->getMaxHealth(), playerMoney,gameTimer.getElapsedTime().asSeconds(), *window);
+    hud.drawHUD(player->getHealth(), player->getMaxHealth(), gameTimer.getElapsedTime().asSeconds(), *window);
 }
 

@@ -5,6 +5,10 @@
 #include "Alert.h"
 #include <queue>
 
+/*
+* HUD, or heads up display has UI for the player to see during gameplay
+*/
+
 class HUD {
 private:
     Healthbar* healthbar;
@@ -19,7 +23,7 @@ public:
     ~HUD();
     void addAlert(Alert alert);
     bool currentAlertIsHighPriority(); // Low priority messages can avoid being added to the queue
-    void drawHUD(int playerHealth, int playerMaxHealth, int money, int time, sf::RenderWindow& window);
+    void drawHUD(int playerHealth, int playerMaxHealth, int time, sf::RenderWindow& window);
 };
 
 #endif

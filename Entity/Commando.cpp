@@ -6,8 +6,9 @@ Commando::Commando(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team,
     sprite.setHitbox({8.f, 0.f, 16.f, 32.f});
     speed = 140;
     bulletSpeed = 500;
-    health = 260;
-    maxHealth = 260;
+    attackDelay = 0.4;
+    health = 150;
+    maxHealth = 150;
     regen = 1;
     damage = 7;
 }

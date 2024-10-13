@@ -13,7 +13,6 @@ HighScoreScene::HighScoreScene(sf::RenderWindow* window, bool edit, int score) :
     }
     std::pair<int, std::string> highscoreData = loadHighScore();
     int highscore = highscoreData.first;
-    std::cout << highscoreData.first << " " << highscoreData.second << '\n';
     if (edit) {
         if (score > highscore) {
             gameEndText.setString("New highscore!");

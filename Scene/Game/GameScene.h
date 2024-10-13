@@ -10,6 +10,7 @@
 #include "HUD.h"
 #include "Interactable.h"
 #include "Alert.h"
+#include <random>
 
 class Director; // Forward declaration as they rely on eachother
 
@@ -23,16 +24,20 @@ private:
     Level level;
     Entity* player;
     Director* director;
-    int playerMoney = 0;
     sf::View gameCamera;
     sf::View uiView;
-    std::vector<Entity*> entities;
+    Entity** enemies;
+    int enemyCount = 0;
+    int enemyCapacity = 10;
+    int maxEnemyCapacity = 40;
     std::vector<sf::Texture> textures;
     std::vector<Interactable*> interactables;
     BulletManager bulletManager;
     sf::Clock directorTimer; 
     sf::Clock gameTimer;
     HUD hud;
+    std::mt19937 mt{std::random_device{}()}; // for randomness
+
 public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();
@@ -40,10 +45,13 @@ public:
     BulletManager* getBulletManager();
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
+    bool isMaxCapacity();
     void addInteractable(Interactable* interactable);
     void sendHudAlert(Alert alert);
     void killEntity(int idx);
     void removeInteractable(int idx);
+
+    void upgradeRandomEnemy();
 
     void setDirector(Director* director);
     Level* getLevel();

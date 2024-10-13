@@ -3,6 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 
+/*
+* Healthbar class, to visually display the health of entities
+*/
+
 class Healthbar {
     sf::RectangleShape shell;
 public:
