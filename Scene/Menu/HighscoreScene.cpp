@@ -1,14 +1,19 @@
 #include "HighscoreScene.h"
+#include "MenuScene.h"
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 HighScoreScene::HighScoreScene(sf::RenderWindow* window, bool edit, int score) : Scene(window), edit(edit), hs(score) {
+    window->setView(sf::View(sf::FloatRect(0,0,window->getSize().x,window->getSize().y)));
     if (!font.loadFromFile("Font/Pixellari.ttf")) {
         std::cerr << "Font not found" << '\n';
     }
     std::pair<int, std::string> highscoreData = loadHighScore();
     int highscore = highscoreData.first;
+    std::cout << highscoreData.first << " " << highscoreData.second << '\n';
     if (edit) {
         if (score > highscore) {
             gameEndText.setString("New highscore!");
@@ -16,24 +21,50 @@ HighScoreScene::HighScoreScene(sf::RenderWindow* window, bool edit, int score) :
         } else {
             gameEndText.setString("You didn't beat your highscore :(");
         }
+    } else if (highscore == 0) {
+        highscoreText.setString("No highscore currently set!");
     }
-    if (highscore > 0 || !getName) {
-        highscoreText.setString("Highscore: " + std::to_string(highscore) + " by " + highscoreData.second);
+    if (highscore > 0) {
+        highscoreText.setString("Highscore: " + formatToMinutes(highscore) + " by " + highscoreData.second);
     }
     gameEndText.setFont(font);
     gameEndText.setFillColor(sf::Color::White);
     gameEndText.setCharacterSize(30);
+
     highscoreText.setFont(font);
     highscoreText.setFillColor(sf::Color::White);
     highscoreText.setCharacterSize(30);
+
+    errorText.setFont(font);
+    errorText.setFillColor(sf::Color::White);
+    errorText.setCharacterSize(24);
+    
+    menuReturn = new Button("Return to Menu", sf::Vector2f(window->getSize().x/2-100,window->getSize().y-120), sf::Vector2f(200,70), &font, [this]{
+        returnToMenu();
+    });
+}
+
+HighScoreScene::~HighScoreScene() {
+    delete menuReturn;
 }
 
 void HighScoreScene::handleEvent(sf::Event event) {
     if (event.type == sf::Event::Resized) {
         window->setView(sf::View(sf::FloatRect(0.f, 0.f, event.size.width, event.size.height)));
+        menuReturn->setPosition(sf::Vector2f(window->getSize().x/2-100, window->getSize().y-120));
     }
     if (getName) {
         if (event.type == sf::Event::TextEntered) {
+            if (name.size() > 12) {
+                errorText.setString("Name must be less than 12 characters.");
+                instructionalDelay.restart();
+                return;
+            }
+            if (event.text.unicode == 32) {
+                errorText.setString("Name may not contain spaces.");
+                instructionalDelay.restart();
+                return;
+            }
             if (std::isprint(event.text.unicode)) {
                 name += event.text.unicode;
             }
@@ -43,14 +74,21 @@ void HighScoreScene::handleEvent(sf::Event event) {
                     name.pop_back();
                 }
             }
-            if (event.key.code == sf::Keyboard::Return || name.size() > 12) {
+            if (event.key.code == sf::Keyboard::Return) {
+                if (name.size() == 0) {
+                    errorText.setString("Cannot accept empty name.");
+                    instructionalDelay.restart();
+                    return;
+                }
+                
                 setHighScore();
                 getName = false;
                 return; // avoid string reset
             }
         }
-        typeDelay.restart();
         highscoreText.setString(name);
+    } else {
+        errorText.setString("");
     }
 }
 
@@ -60,6 +98,9 @@ std::pair<int, std::string> HighScoreScene::loadHighScore() {
     if (file.is_open()) {
         std::pair<int, std::string> highscoreData;
         file >> word;
+        if (file.eof()) { // If the file only contains a number
+            return std::pair<int, std::string>{0,""};
+        }
         if (std::all_of(word.begin(),word.end(), ::isdigit)) {
             highscoreData.first = std::stoi(word);
         }
@@ -73,8 +114,25 @@ std::pair<int, std::string> HighScoreScene::loadHighScore() {
 
 void HighScoreScene::setHighScore() {
     std::ofstream file("score"); // create and open score file
-    file << hs << name;
-    highscoreText.setString("Highscore: " + std::to_string(hs) + " by " + name);
+    file << hs << " " << name;
+    highscoreText.setString("Highscore: " +  formatToMinutes(hs) + " by " + name);
+}
+
+void HighScoreScene::returnToMenu() {
+    transitionScene = new MenuScene(window);
+}
+
+// Format time as MM:SS
+std::string HighScoreScene::formatToMinutes(int seconds) {
+    std::stringstream m;
+    std::stringstream s;
+    m << std::setfill('0') << std::setw(2) << seconds/60;
+    s << std::setfill('0') << std::setw(2) << seconds%60;
+    return m.str() + ":" + s.str();
+}
+
+bool HighScoreScene::buttonContainsMouse(Button& button) {
+    return button.contains(window->mapPixelToCoords(sf::Mouse::getPosition(*window), window->getView()));
 }
 
 void HighScoreScene::update(float dt) {
@@ -84,15 +142,32 @@ void HighScoreScene::update(float dt) {
         } else {
             highscoreText.setString(name);
         }
+        if (instructionalDelay.getElapsedTime().asSeconds() > 2) {
+            errorText.setString("Press enter to confirm your selection");
+        }
+    }
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttonContainsMouse(*menuReturn)) {
+        menuReturn->press();
     }
 }
 
 void HighScoreScene::draw() {
+    if (edit) { // Ensure texts remain centered. Probably more expensive than it needs to be, but its a menu so whatever
     gameEndText.setOrigin(gameEndText.getLocalBounds().width/2, gameEndText.getLocalBounds().height/2);
-    gameEndText.setPosition(window->getSize().x/2, window->getSize().y/2-15);
-    window->draw(gameEndText);
+    gameEndText.setPosition(window->getSize().x/2, window->getSize().y/2-17);
 
     highscoreText.setOrigin(highscoreText.getLocalBounds().width/2, highscoreText.getLocalBounds().height/2);
-    highscoreText.setPosition(window->getSize().x/2, window->getSize().y/2+15);
+    highscoreText.setPosition(window->getSize().x/2, window->getSize().y/2+17);
+
+    errorText.setOrigin(errorText.getLocalBounds().width/2, errorText.getLocalBounds().height/2);
+    errorText.setPosition(window->getSize().x/2, window->getSize().y/2+47);
+    } else {
+        highscoreText.setOrigin(highscoreText.getLocalBounds().width/2, highscoreText.getLocalBounds().height/2);
+        highscoreText.setPosition(window->getSize().x/2,window->getSize().y/2);
+    }
+
+    window->draw(gameEndText);
     window->draw(highscoreText);
+    window->draw(errorText);
+    menuReturn->draw(*window);
 }

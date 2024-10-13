@@ -1,4 +1,5 @@
 #include "MenuScene.h"
+#include "HighscoreScene.h"
 #include <iostream>
 
 MenuScene::MenuScene(sf::RenderWindow* window) : Scene(window) {
@@ -17,15 +18,18 @@ MenuScene::MenuScene(sf::RenderWindow* window) : Scene(window) {
     menuTitle.setOrigin(menuTitle.getLocalBounds().width/2, 0);
     menuTitle.setPosition(windowCenter.x,0);
     // Adding buttons to the screen. Buttons functions are passed through the constructor as lambda expressions.
-    int buttonStart = 240;
+    int buttonStart = 230;
     buttons.push_back(Button("Start Game", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart), sf::Vector2f(buttonWidth,70), font, [this] {
         startGame();
     }));
-    buttons.push_back(Button("Input Type", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+100), sf::Vector2f(buttonWidth,70), font, [this] {
+    buttons.push_back(Button("Input Type", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+90), sf::Vector2f(buttonWidth,70), font, [this] {
         this->buttons[1].setString(toggleInputType());
         this->buttons[1].resetOrigin();
     }));
-    buttons.push_back(Button("Exit", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+2*100), sf::Vector2f(buttonWidth,70), font, [window] {
+    buttons.push_back(Button("Highscore", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+2*90), sf::Vector2f(buttonWidth,70), font, [window, this]{
+        transitionScene = new HighScoreScene(window, false, 0);
+    }));
+    buttons.push_back(Button("Exit", sf::Vector2f(windowCenter.x-buttonWidth/2,buttonStart+3*90), sf::Vector2f(buttonWidth,70), font, [window] {
         window->close();
     }));
 }

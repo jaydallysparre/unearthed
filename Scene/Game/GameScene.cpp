@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "AIInput.h"
+#include "HighscoreScene.h"
 #include <stack>
 
 GameScene::GameScene(sf::RenderWindow* window, Level level) :Scene(window), level(level) {
@@ -110,6 +111,10 @@ void GameScene::handleEvent(sf::Event event) {
 
 // Handles updating the game scene
 void GameScene::update(float dt) {
+    if (player->isDead()) { // Finish the game!
+        transitionScene = new HighScoreScene(window, true, gameTimer.getElapsedTime().asSeconds());
+        return;
+    }
     // Go to the menu if escape is pressed
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         transitionScene = new MenuScene(window);
