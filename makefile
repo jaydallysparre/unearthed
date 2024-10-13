@@ -10,7 +10,4 @@ all: ${OBJS}
 	g++ ${FLAGS} ${FILES} ${LIBS} -o ${EXEC}
 
 debug:
-	g++ ${FLAGS} ${FILES} ${LIBS} -o ${EXEC} -g
-
-cpp11:
-	g++ -std=c++11 ${FLAGS} ${FILES} ${LIBS} -o ${EXEC}
+	g++ ${FLAGS} ${FILES} ${LIBS} -o ${EXEC} -g -pg

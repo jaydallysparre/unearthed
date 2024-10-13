@@ -9,6 +9,7 @@
 #include <limits>
 #include "EnemyType.h"
 #include <utility>
+#include <random>
 
 struct AINode {
     AINode(int x, int y, bool traversable) : x(x), y(y), traversable(traversable) {}
@@ -34,6 +35,8 @@ class Level {
 private:
     std::vector<std::vector<int>> level;
     std::vector<std::vector<int>> collisionMap; // entities's positions are projected onto this for collisions
+    std::mt19937 mt{std::random_device{}()}; // For randomness
+    std::vector<std::pair<int,int>> openSquares;
     std::vector<int> collidableTiles; // allow map maker to define which tiles are collidable on level creation
     sf::Texture spritesheet;
     int tileSize;

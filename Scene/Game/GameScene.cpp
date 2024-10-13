@@ -24,6 +24,7 @@ GameScene::~GameScene() {
     delete director;
 }
 
+// The below function is so that enemies can share the same texture for the class.
 void GameScene::loadEnemyTexture() {
     sf::Texture t;
     std::vector<std::string> texturesToOpen = {"ghost.png"};

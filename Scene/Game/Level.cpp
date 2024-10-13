@@ -1,5 +1,4 @@
 #include "Level.h"
-#include <random>
 #include <chrono>
 
 Level::Level() {}
@@ -53,6 +52,7 @@ std::vector<std::vector<int>> Level::generateCollisionMap() {
             }
             if (!isCollidable) {
                 collisionMap[i].push_back(0);
+                openSquares.push_back(std::pair<int,int>{i, j});
             }
         }
     }
@@ -68,19 +68,8 @@ std::vector<EnemyType::Enemy> Level::getAllowedEnemys() {
 }
 
 std::pair<int, int> Level::getOpenSquare() {
-    std::pair<int, int> square{-1, -1};
-    std::mt19937 mt{std::random_device{}()};
-    std::uniform_int_distribution row{0, (int)collisionMap.size()-1};
-    std::uniform_int_distribution col{0, (int)collisionMap[0].size()-1};
-    while (square.first < 0) {
-        int r = row(mt);
-        int c = col(mt);
-        if (collisionMap[r][c] == 0) {
-            square.first = r;
-            square.second = c;
-        }
-    }
-    return square;
+    std::uniform_int_distribution square{0, (int)openSquares.size()-1};
+    return openSquares[square(mt)];
 }
 
 void Level::display(sf::RenderWindow& window) {
