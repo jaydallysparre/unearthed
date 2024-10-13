@@ -15,7 +15,7 @@
 
 int main() {
     Level level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}); 
-    sf::RenderWindow window(sf::VideoMode(800,600), "SFML Project");
+    sf::RenderWindow window(sf::VideoMode(800,600), "unearthed.");
     sf::Clock deltaClock;
     MenuScene* menu = new MenuScene(&window);
     SceneManager sceneManager(menu);
