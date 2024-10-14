@@ -9,6 +9,9 @@ EXEC = unearthed
 all:
 	g++ ${FLAGS} ${FILES} main.cpp ${LIBS} -o ${EXEC}
 
+optimized:
+	g++ -o2 ${FLAGS} ${FILES} main.cpp ${LIBS} -o ${EXEC}
+	
 debug:
 	g++ ${FLAGS} ${FILES} main.cpp ${LIBS} -o ${EXEC} -g
 
