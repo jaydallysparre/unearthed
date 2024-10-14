@@ -19,14 +19,13 @@ private:
     sf::Clock timer;
     int heuristic(AINode& begin, AINode& end); // Gets distance heuristic for A* algorithm. Helper function for findPath
     std::vector<AINode*> getNeighbours(AINode* node); // Gets a nodes neighbour. helper function for findPath
-    std::stack<AINode*> findPath(AINode& begin, AINode& end); // Finds a path to the player
-    std::vector<std::vector<AINode>> generateNodeMap();
     void resetNodeMap();
     sf::Vector2f getNodeDirection(sf::Vector2f entityOrigin, AINode& node);
-
 public:
+    std::vector<std::vector<AINode>> generateNodeMap();
+    std::stack<AINode*> findPath(AINode& begin, AINode& end); // Finds a path to the player
     AIInput(Entity* player, Level* level);
-        std::stack<AINode*> getNodePath();
+    std::stack<AINode*> getNodePath();
     void handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window);
 };
 

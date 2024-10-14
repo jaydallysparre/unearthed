@@ -24,6 +24,9 @@ public:
     static float distance(T vector1, T vector2) {
         return std::sqrt(std::pow(vector1.x-vector2.x,2) + std::pow(vector1.y-vector2.y, 2));
     }
+    static float length(T vector) {
+        return std::sqrt(std::pow(vector.x,2) + std::pow(vector.y,2));
+    }
 };
 
 #endif

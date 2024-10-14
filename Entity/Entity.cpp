@@ -4,6 +4,7 @@
 Entity::Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team) : inputHandler(inputHandler), team(team) {
     sprite.setPosition(spawnPos);
     healthbar = new Healthbar(0.25, sf::Vector2f(spawnPos.x, spawnPos.y-15));
+    sprite.setOrigin(sprite.getLocalBounds().width/2, sprite.getLocalBounds().height/2);
 }
 
 Entity::~Entity() {
@@ -74,11 +75,26 @@ void Entity::healToFull() {
     health = maxHealth;
 }
 
+// FLips the sprite left (if flip) or right (if !flip)
+
+void Entity::flipSprite(bool flip) {
+    if (flip) {
+        sprite.setScale(-1, 1);
+        sprite.setOrigin(sprite.getLocalBounds().width, 0);
+    }
+    else {
+        sprite.setScale(1, 1);
+        sprite.setOrigin(0, 0);
+    }
+}
+
+
 // Listens to the input handler and perform entity actions.
 
 void Entity::listenToInput(float dt, Level& level, sf::RenderWindow& window) {
     inputHandler->handleInputs(getOrigin(), window);
     if (inputHandler->isMoving() && canMove) {
+        flipSprite( inputHandler->getMoveDir().x < 0);
         move(inputHandler->getMoveDir(), level, dt);
     }
     if (inputHandler->isAttacking() && attackTimer.getElapsedTime().asSeconds() > attackDelay) {
