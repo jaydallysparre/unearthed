@@ -6,16 +6,14 @@ AIInput::AIInput(Entity* player, Level* level) : target(player), level(level) {
     generateNodeMap();
 }
 
-// Helper heuristic function for the findPath method.
-
+// The heuristic is used in A* for guessing good next tiles to search
 int AIInput::heuristic(AINode& begin, AINode& end) {
     int dx = std::abs(end.x - begin.x);
     int dy = std::abs(end.y - begin.y);
     return std::min(dx, dy) * 14 + std::abs(dx - dy) * 10;
 }
 
-// Generates a map of AI Nodes to be used by the findPath method.
-
+// Node map is composed of nodes which will have costs, and whether they are traversable or not
 std::vector<std::vector<AINode>> AIInput::generateNodeMap() {
     for (int i = 0; i < level->getCollisionMap().size(); ++i) {
         nodeMap.push_back(std::vector<AINode>{});
@@ -26,8 +24,6 @@ std::vector<std::vector<AINode>> AIInput::generateNodeMap() {
     return nodeMap;
 }
 
-// Resets the node map to default for next A* run
-
 void AIInput::resetNodeMap() {
     for (std::vector<AINode> vec : nodeMap) {
         for (AINode node : vec) {
@@ -36,15 +32,15 @@ void AIInput::resetNodeMap() {
     }
 }
 
-// Gets neighbouring AINodes. Helper function for findPath
-
 std::vector<AINode*> AIInput::getNeighbours(AINode* node) {
     std::vector<AINode*> neighbours;
     for (int i = -1; i < 2; ++i) {
         for (int j = -1; j < 2; ++j) {
-            if (i == 0 && j == 0 || (std::abs(i) == 1 && std::abs(j) == 1)) {
+            if (i == 0 && j == 0 || (std::abs(i) == 1 && std::abs(j) == 1)) { // Don't include itself, nor diagonal tiles
                 continue;
             }
+
+            // Calculate real X and Y based on node pos
             int newY = node->y + i;
             int newX = node->x + j;
             if ((newY > 0 && newY < nodeMap.size()) && newX > 0 && newX < nodeMap[newY].size()) {
@@ -55,12 +51,10 @@ std::vector<AINode*> AIInput::getNeighbours(AINode* node) {
     return neighbours;
 }
 
-// Finds a path to the player using the A* pathfinding algorithm.
-
 std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
     resetNodeMap();
-    std::vector<AINode*> open;
-    std::vector<AINode*> closed;
+    std::vector<AINode*> open; // Unsearched nodes
+    std::vector<AINode*> closed; // Already searched nodes
     open.push_back(&begin);
     begin.gCost = 0;
     begin.fCost = heuristic(begin, end);
@@ -108,8 +102,6 @@ std::stack<AINode*> AIInput::findPath(AINode& begin, AINode& end) {
    return std::stack<AINode*>{};
 }
 
-// Returns normalized direction to the entity position relative to the AI node
-
 sf::Vector2f AIInput::getNodeDirection(sf::Vector2f entityOrigin, AINode& node) {
     return MathUtil<sf::Vector2f>::normalize(sf::Vector2f(node.x*32+16, node.y*32+16) - entityOrigin);
 }
@@ -117,8 +109,6 @@ sf::Vector2f AIInput::getNodeDirection(sf::Vector2f entityOrigin, AINode& node) 
 std::stack<AINode*> AIInput::getNodePath() {
     return path;
 }
-
-// Enemy calls pathfinding methods and attacks the player.
 
 void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     move = false;
@@ -143,6 +133,7 @@ void AIInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) 
         move = true;
     }
     
+    // Attack enemy if close enough
     attack = false;
     sf::Vector2f targetOrigin = target->getOrigin();
     if (MathUtil<sf::Vector2f>::distance(entityOrigin, targetOrigin) <= 300) {

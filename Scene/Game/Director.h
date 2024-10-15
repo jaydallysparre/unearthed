@@ -26,12 +26,22 @@ private:
     int stageCredits;
     std::queue<EnemyType::Enemy> spawnQueue;
     sf::Clock enemySpawnTimer;
+
+    // Spawns enemies with gamescene
     void spawnEnemy(EnemyType::Enemy enemy);
+
+    // Spend its accumulated credit to add enemies to the spawn queue
     void spendCredits();
+
+    // Accumulate credits
     void updateCredits();
 public:
     Director(GameScene* gamescene);
+    
+    // Populate the stage with chests
     void populateStage();
+
+    // Call its internal functions
     void update();
 };
 

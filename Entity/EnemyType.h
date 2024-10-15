@@ -15,7 +15,11 @@ public:
     enum Enemy {
         Ghost
     };
+
+    // Returns the amount of enemy types that have been implemented
     static int getEnemyAmount();
+    
+    // returns the cost of the enemy
     static int getCost(Enemy enemy);
 };
 

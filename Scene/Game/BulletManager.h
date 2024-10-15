@@ -13,9 +13,17 @@ private:
     std::vector<Bullet*> bullets;
 public:
     ~BulletManager();
+
+    // Add bullet to bullet vector
     void addBullet(Bullet* bullet);
+
+    // Remove bullet from bullet vector
     void removeBullet(int idx);
+
+    // Update the positions of all the bullets, and remove them if they are colliding. Damage respective entities
     void update(Level& level, Entity** entities, int entityCount, Entity* player, float dt);
+
+    // Display all bullets
     void display(sf::RenderWindow& window);
 };
 

@@ -17,10 +17,18 @@ private:
     sf::Sprite sprite;
 public:
     Bullet(sf::Vector2f direction, sf::Vector2f spawnPos, Team team, int damage, int speed);
+    
+    // Getters
     int getDamage();
     Team getTeam();
+
+    // Move the bullet
     void move(float dt);
+
+    // Draw the bullet
     void draw(sf::RenderWindow& window);
+
+    // Check collisions
     bool isWorldColliding(Level& level);
     bool isEntityColliding(Entity* entity);
 };

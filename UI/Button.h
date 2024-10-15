@@ -18,12 +18,24 @@ private:
     sf::Clock buttonTimer;
 public:
     Button(std::string text, sf::Vector2f position, sf::Vector2f size, sf::Font* font, std::function<void()> action);
+
+    // Setters
     void setPosition(sf::Vector2f position);
     void setString(std::string string);
+
+    // Reset origin of the button
     void resetOrigin();
+
+    // Get position of the button
     sf::Vector2f getPosition();
+
+    // Does the button contain a point? Used for mouse clicking
     bool contains(sf::Vector2f point);
+
+    // Do callable stored in action
     void press();
+
+    // Draw the button
     void draw(sf::RenderWindow& window);
 };
 #endif

@@ -21,8 +21,13 @@ private:
 public:
     HUD();
     ~HUD();
+    // Add an alert to the priority queue
     void addAlert(Alert alert);
-    bool currentAlertIsHighPriority(); // Low priority messages can avoid being added to the queue
+
+    // Low priority messages can avoid being added to the queue
+    bool currentAlertIsHighPriority(); 
+
+    // Draw hud elements
     void drawHUD(int playerHealth, int playerMaxHealth, int time, sf::RenderWindow& window);
 };
 

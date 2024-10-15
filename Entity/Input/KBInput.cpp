@@ -1,8 +1,6 @@
 #include "KBInput.h"
 #include <iostream>
 
-// Gets keyboard only input and sets the movement and attack direction.
-
 void KBInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) {
     moveDir.x = moveDir.y = 0;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
@@ -17,7 +15,7 @@ void KBInput::handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         moveDir.x += 1;
     }
-    move = !(moveDir == sf::Vector2f(0,0));
+    move = !(moveDir == sf::Vector2f(0,0)); // Move is false if it is the zero vector, otherwise true
 
     moveDir = MathUtil<sf::Vector2f>::normalize(moveDir);
 

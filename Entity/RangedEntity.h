@@ -15,6 +15,8 @@ protected:
     BulletManager* bulletManager; // When bullets are created they are registered with the bullet manager
 public:
     virtual ~RangedEntity() = default;
+
+    // Shoot bullet, registering it with the bullet manager
     void attack(sf::Vector2f attackDir) {
         Bullet* bullet = new Bullet(attackDir, getOrigin(), team, damage, bulletSpeed);
         bulletManager->addBullet(bullet);

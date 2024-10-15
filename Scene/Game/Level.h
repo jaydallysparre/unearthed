@@ -25,16 +25,26 @@ private:
     sf::Texture spritesheet;
     int tileSize;
     std::vector<EnemyType::Enemy> allowedEnemies;
+
+    // Loads level from file
     bool loadFromFile(std::string filename);
+
+    // Loads spritesheet to be displayed
     bool loadSpriteSheet(std::string filename, int tileSize);
 public:
     Level();
     Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles, std::vector<EnemyType::Enemy> allowedEnemies);
-    int getTileSize();
+
+    // Generate map of collision data
     std::vector<std::vector<int>> generateCollisionMap();
+
+    // Getters
+    int getTileSize();
     std::vector<std::vector<int>> getCollisionMap();
     std::vector<EnemyType::Enemy> getAllowedEnemys();
-    std::pair<int, int> getOpenSquare(); // get a tile that is not a wall.
+    std::pair<int, int> getOpenSquare(); // get a random tile that is not a wall.
+
+    // Display level
     void display(sf::RenderWindow& window);
 };
 

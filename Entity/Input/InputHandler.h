@@ -15,10 +15,16 @@ protected:
     sf::Vector2f attackDir;
 public:
     InputHandler();
+
+    // function designed to set attributes for entity to read
     void virtual handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window) = 0;
-    bool isMoving();
+
+    // Return directions
     sf::Vector2f getMoveDir();
     sf::Vector2f getAttackDir();
+
+    // Return states
+    bool isMoving();
     bool isAttacking();
 };
 

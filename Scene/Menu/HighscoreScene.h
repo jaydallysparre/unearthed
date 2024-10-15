@@ -21,11 +21,21 @@ private:
     std::string name;
     Button* menuReturn;
 
+    // Creates highscore file
     void setHighScore();
+
+    // Return to the menu scene
     void returnToMenu();
+
+    // Formats time as MM:SS
     std::string formatToMinutes(int seconds);
+
+    // Returns if button contains mouse
     bool buttonContainsMouse(Button& button);
+
     HighScoreScene(sf::RenderWindow* window); // Stripped down constructor for testing
+
+    // Loads highscore file
     std::pair<int, std::string> loadHighScore();
 public:
     HighScoreScene(sf::RenderWindow* window, bool edit, int score=0);

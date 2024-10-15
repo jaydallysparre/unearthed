@@ -10,6 +10,7 @@
 
 class KBInput : public InputHandler {
 public:
+    // Sets attributes based on keyboard only input
     void handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window);
 };
 

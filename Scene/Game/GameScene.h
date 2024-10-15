@@ -38,24 +38,39 @@ private:
     HUD hud;
     std::mt19937 mt{std::random_device{}()}; // for randomness
 
+    // Remove entity from array
     void killEntity(int idx);
+
+    // So that we only load enemy textures once
     void loadEnemyTexture();
+
+    // Removes interactable from the stage
     void removeInteractable(int idx);
 public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();
-    BulletManager* getBulletManager();
+
+    // Add objects to the stage
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
     void addInteractable(Interactable* interactable);
+    
+    // Sends an alert to the hud
     void sendHudAlert(Alert alert);
 
+    // Upgrade random enemy in enemy array
     void upgradeRandomEnemy();
 
+    // Set director
     void setDirector(Director* director);
+
+    // Have we hit the enemy limit?
     bool isMaxCapacity();
+
+    // Getters
     Level* getLevel();
     Entity* getPlayer();
+    BulletManager* getBulletManager();
     sf::Clock getGameTimer();
     std::vector<sf::Texture>* getTextures();
     int getClosestValidInteractable(); // gets the closest valid interactable to the player

@@ -54,6 +54,8 @@ void Director::spendCredits() {
         }
     }
     std::cout << "min cost = " << minEnemyCredit << '\n';
+
+    // While we have enemy credits to spend
     while (enemyCredits >= minEnemyCredit) {
     for (EnemyType::Enemy enemy : allowedEnemies) {
         int enemyCost = EnemyType::getCost(enemy);

@@ -38,23 +38,35 @@ protected:
     sf::Texture spriteTexture;
     HBSprite sprite;
     Healthbar* healthbar;
-    bool showHealthbar;
+    bool showHealthbar; // will be false for the player
     Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
+
+    // Flips the direction of the sprite, where flip sends it left, and !flip sends it right
     void flipSprite(bool flip);
 public:
     virtual ~Entity();
+
+    // Move the player in a direction, if collisions allow
     void virtual move(sf::Vector2f direction, Level& level, float dt);
+
+    // Virtual attack, to be implemented by derived class
     void virtual attack(sf::Vector2f attackDir) = 0;
+    
+    // Take specified damage amount
     void virtual takeDamage(int dmgAmount);
 
+    // Getters
     int getHealth();
     int getMaxHealth();
     Team getTeam();
     InputHandler* getInputHandler();
     sf::Vector2f getPosition();
-    sf::Vector2f getOrigin(); // Get center of hitbox
+    sf::Vector2f getOrigin(); 
+
+    // Return if health <= 0
     bool isDead();
 
+    // Upgrade entity attributes
     void upgradeMaxHealth(int amount);
     void upgradeAttackSpeed(float amount);
     void upgradeAttackDamage(int amount);
@@ -62,11 +74,17 @@ public:
     void upgradeSpeed(int amount);
     void healToFull();
 
+    // Listen to input handler signals
     void listenToInput(float dt, Level& level, sf::RenderWindow& window);
+
+    // Display player in window
     void display(sf::RenderWindow& window);
+
+    // Check collisions
     bool isColliding(Level& level);
     bool pointInEntity(sf::Vector2f point);
     
+    // Update
     void virtual update(sf::RenderWindow& window, Level& level, float dt);
 };
 

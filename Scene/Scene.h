@@ -3,6 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 
+/*
+* Base scene class for other scenes to derive from.
+*/
+
 class Scene {
 protected:
     sf::RenderWindow* window;
@@ -13,6 +17,8 @@ public:
     }
     virtual ~Scene() = default;
     virtual void handleEvent(sf::Event event) = 0;
+
+    // Get the transitioning scene
     Scene* getTransitionScene() {return transitionScene;};
     virtual void update(float dt) = 0;
     virtual void draw() = 0;

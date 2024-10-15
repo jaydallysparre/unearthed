@@ -26,7 +26,11 @@ private:
     int buttonWidth = 300;
     sf::Texture menuTitleTexture;
     sf::Sprite menuTitle;
+
+    // Change input type between KBM and KB only
     std::string toggleInputType();
+
+    // Starts gamescene
     void startGame();
 public:
     MenuScene(sf::RenderWindow* window);

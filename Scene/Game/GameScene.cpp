@@ -78,6 +78,8 @@ void GameScene::sendHudAlert(Alert alert) {
 void GameScene::killEntity(int idx) {
 
     delete enemies[idx];
+
+    // shuffle enemies back
     for (int i = idx; i < enemyCount-1; ++i) {
         enemies[i] = enemies[i+1];
     }
@@ -126,7 +128,6 @@ std::vector<sf::Texture>* GameScene::getTextures() {
     return &textures;
 }
 
-// Gets closest valid interactable, and handles highlight visual logic for it
 
 int GameScene::getClosestValidInteractable() {
     float distance = std::numeric_limits<float>::infinity();
@@ -154,7 +155,6 @@ void GameScene::handleEvent(sf::Event event) {
     }
 }
 
-// Handles updating the game scene
 void GameScene::update(float dt) {
     if (player->isDead()) { // Finish the game!
         transitionScene = new HighScoreScene(window, true, gameTimer.getElapsedTime().asSeconds());
@@ -193,6 +193,7 @@ void GameScene::draw() {
     bulletManager.display(*window);
 
     for (int i = 0; i < enemyCount; ++i) {
+        // If we are debugging, show the paths the enemy AI finds
         if (debug) {
             InputHandler* IH = enemies[i]->getInputHandler();
             std::stack<AINode*> nodePath = static_cast<AIInput*>(IH)->getNodePath();

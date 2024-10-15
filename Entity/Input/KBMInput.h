@@ -10,6 +10,7 @@
 
 class KBMInput : public InputHandler {
 public:
+    // sets attributes based on keyboard and mouse input
     void handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window);
 };
 

@@ -64,11 +64,13 @@ void HighScoreScene::handleEvent(sf::Event event) {
                 instructionalDelay.restart();
                 return;
             }
+            // Disallow spaces
             if (event.text.unicode == 32) {
                 errorText.setString("Name may not contain spaces.");
                 instructionalDelay.restart();
                 return;
             }
+            // If printable, add character to name
             if (std::isprint(event.text.unicode)) {
                 name += event.text.unicode;
             }
