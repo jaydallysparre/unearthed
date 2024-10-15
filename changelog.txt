@@ -1,0 +1,8 @@
+Initially planned to have level save/load. This was scrapped as I decided to make the game only have one level.
+Instead to meet the save/load requirement I implemented the high score system as an additional class.
+This also meets the requirements regarding input validation.
+
+Added unplanned alert system in order to deliver information to the player.
+
+Due to implementation of AIInput input handler had to add additional AINode class.
+
