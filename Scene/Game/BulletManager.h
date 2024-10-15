@@ -15,7 +15,6 @@ public:
     ~BulletManager();
     void addBullet(Bullet* bullet);
     void removeBullet(int idx);
-    //void update(Level& level, std::vector<Entity*> entities, Entity* player, float dt);
     void update(Level& level, Entity** entities, int entityCount, Entity* player, float dt);
     void display(sf::RenderWindow& window);
 };

@@ -20,6 +20,7 @@ enum class Team { // TO FIX
 */
 
 class Entity {
+friend class Tester;
 protected:
     int health;
     int maxHealth;
@@ -39,6 +40,7 @@ protected:
     Healthbar* healthbar;
     bool showHealthbar;
     Entity(InputHandler* inputHandler, sf::Vector2f spawnPos, Team team);
+    void flipSprite(bool flip);
 public:
     virtual ~Entity();
     void virtual move(sf::Vector2f direction, Level& level, float dt);
@@ -60,7 +62,6 @@ public:
     void upgradeSpeed(int amount);
     void healToFull();
 
-    void flipSprite(bool flip);
     void listenToInput(float dt, Level& level, sf::RenderWindow& window);
     void display(sf::RenderWindow& window);
     bool isColliding(Level& level);

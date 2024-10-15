@@ -31,7 +31,7 @@ GameScene::~GameScene() {
 // The below function is so that enemies can share the same texture for the class.
 void GameScene::loadEnemyTexture() {
     sf::Texture t;
-    std::vector<std::string> texturesToOpen = {"ghost.png"};
+    std::vector<std::string> texturesToOpen = {"img/ghost.png"};
     for (int i = 0; i < texturesToOpen.size(); ++i) {
         sf::Texture t;
         t.loadFromFile(texturesToOpen[i]);

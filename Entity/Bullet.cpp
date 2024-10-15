@@ -2,7 +2,7 @@
 
 Bullet::Bullet(sf::Vector2f direction, sf::Vector2f spawnPos, Team team, int damage, int speed) : direction(direction), team(team), damage(damage), speed(speed) {
     sprite.setPosition(spawnPos);
-    spriteTexture.loadFromFile("bullet.png");
+    spriteTexture.loadFromFile("img/bullet.png");
     sprite.setTexture(spriteTexture);
 }
 

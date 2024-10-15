@@ -16,5 +16,5 @@ debug:
 	g++ ${FLAGS} ${FILES} main.cpp ${LIBS} -o ${EXEC} -g
 
 tests: ${FILES} Testing/Tester.cpp
-	g++ ${FLAGS} ${FILES} -ITesting Testing/Tester.cpp testmain.cpp ${LIBS} -o tests
+	g++ ${FLAGS} ${FILES} -ITesting Testing/Tester.cpp Testing/testmain.cpp ${LIBS} -o tests -g
 

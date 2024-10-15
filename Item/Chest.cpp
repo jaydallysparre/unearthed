@@ -2,8 +2,8 @@
 #include <random>
 
 Chest::Chest(sf::Vector2f position) : Interactable(position) {
-    spriteTexture.loadFromFile("chest.png");
-    highlightTexture.loadFromFile("highlightchest.png");
+    spriteTexture.loadFromFile("img/chest.png");
+    highlightTexture.loadFromFile("img/highlightchest.png");
     sprite.setTexture(spriteTexture);
 }
 

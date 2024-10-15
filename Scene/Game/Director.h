@@ -26,12 +26,12 @@ private:
     int stageCredits;
     std::queue<EnemyType::Enemy> spawnQueue;
     sf::Clock enemySpawnTimer;
-public:
-    Director(GameScene* gamescene);
-    void populateStage();
     void spawnEnemy(EnemyType::Enemy enemy);
     void spendCredits();
     void updateCredits();
+public:
+    Director(GameScene* gamescene);
+    void populateStage();
     void update();
 };
 

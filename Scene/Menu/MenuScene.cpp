@@ -8,7 +8,7 @@ MenuScene::MenuScene(sf::RenderWindow* window) : Scene(window) {
         std::cerr << "Font could not be loaded" << '\n';
     }
 
-    if (!menuTitleTexture.loadFromFile("unearthed.png")) {
+    if (!menuTitleTexture.loadFromFile("img/unearthed.png")) {
         std::cerr << "Image could not be loaded" << '\n';
     }
 
@@ -39,7 +39,7 @@ MenuScene::~MenuScene() {
 }
 
 void MenuScene::startGame() {
-    GameScene* game = new GameScene(window, Level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}));
+    GameScene* game = new GameScene(window, Level("data/level1.txt", "img/level1.png", 32, {2}, {EnemyType::Enemy::Ghost}));
     InputHandler* input;
     switch(inputType) {
         case KB:

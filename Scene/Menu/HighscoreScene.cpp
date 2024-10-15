@@ -43,6 +43,11 @@ HighScoreScene::HighScoreScene(sf::RenderWindow* window, bool edit, int score) :
     });
 }
 
+HighScoreScene::HighScoreScene(sf::RenderWindow* window) : Scene(window) {
+    font.loadFromFile("Font/Pixellari.ttf");
+    menuReturn = new Button( "", sf::Vector2f(0,0), sf::Vector2f(0,0), &font,[]{});
+}
+
 HighScoreScene::~HighScoreScene() {
     delete menuReturn;
 }
@@ -93,7 +98,7 @@ void HighScoreScene::handleEvent(sf::Event event) {
 
 std::pair<int, std::string> HighScoreScene::loadHighScore() {
     std::string word;
-    std::ifstream file("score");
+    std::ifstream file("data/score");
     if (file.is_open()) {
         std::pair<int, std::string> highscoreData;
         file >> word;
@@ -111,8 +116,9 @@ std::pair<int, std::string> HighScoreScene::loadHighScore() {
     return std::pair<int, std::string>{0,""};
 }
 
+
 void HighScoreScene::setHighScore() {
-    std::ofstream file("score"); // create and open score file
+    std::ofstream file("data/score"); // create and open score file
     file << hs << " " << name;
     highscoreText.setString("Highscore: " +  formatToMinutes(hs) + " by " + name);
 }

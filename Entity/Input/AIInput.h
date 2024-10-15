@@ -11,6 +11,7 @@
 */
 
 class AIInput : public InputHandler {
+    friend class Tester;
 private:
     Entity* target; // Player to target
     Level* level; // For pathfinding
@@ -21,9 +22,9 @@ private:
     std::vector<AINode*> getNeighbours(AINode* node); // Gets a nodes neighbour. helper function for findPath
     void resetNodeMap();
     sf::Vector2f getNodeDirection(sf::Vector2f entityOrigin, AINode& node);
-public:
     std::vector<std::vector<AINode>> generateNodeMap();
     std::stack<AINode*> findPath(AINode& begin, AINode& end); // Finds a path to the player
+public:
     AIInput(Entity* player, Level* level);
     std::stack<AINode*> getNodePath();
     void handleInputs(sf::Vector2f entityOrigin, sf::RenderWindow& window);

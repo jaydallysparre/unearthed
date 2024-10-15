@@ -25,11 +25,11 @@ private:
     sf::Texture spritesheet;
     int tileSize;
     std::vector<EnemyType::Enemy> allowedEnemies;
+    bool loadFromFile(std::string filename);
+    bool loadSpriteSheet(std::string filename, int tileSize);
 public:
     Level();
     Level(std::string lvlFilename, std::string spriteFilename, int tileSize, std::vector<int> collidableTiles, std::vector<EnemyType::Enemy> allowedEnemies);
-    bool loadSpriteSheet(std::string filename, int tileSize);
-    bool loadFromFile(std::string filename);
     int getTileSize();
     std::vector<std::vector<int>> generateCollisionMap();
     std::vector<std::vector<int>> getCollisionMap();

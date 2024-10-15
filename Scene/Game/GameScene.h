@@ -38,22 +38,22 @@ private:
     HUD hud;
     std::mt19937 mt{std::random_device{}()}; // for randomness
 
+    void killEntity(int idx);
+    void loadEnemyTexture();
+    void removeInteractable(int idx);
 public:
     GameScene(sf::RenderWindow* window, Level level);
     ~GameScene();
-    void loadEnemyTexture();
     BulletManager* getBulletManager();
     void addPlayer(Entity* player);
     void addEnemy(Entity* enemy);
-    bool isMaxCapacity();
     void addInteractable(Interactable* interactable);
     void sendHudAlert(Alert alert);
-    void killEntity(int idx);
-    void removeInteractable(int idx);
 
     void upgradeRandomEnemy();
 
     void setDirector(Director* director);
+    bool isMaxCapacity();
     Level* getLevel();
     Entity* getPlayer();
     sf::Clock getGameTimer();

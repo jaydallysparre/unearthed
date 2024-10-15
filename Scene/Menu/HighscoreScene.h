@@ -7,6 +7,7 @@
 #include <string>
 
 class HighScoreScene : public Scene {
+    friend class Tester;
 private:
     sf::Font font;
     sf::Text gameEndText; // Whether a new highscore was gotten or not
@@ -20,11 +21,12 @@ private:
     std::string name;
     Button* menuReturn;
 
-    std::pair<int, std::string> loadHighScore();
     void setHighScore();
     void returnToMenu();
     std::string formatToMinutes(int seconds);
     bool buttonContainsMouse(Button& button);
+    HighScoreScene(sf::RenderWindow* window); // Stripped down constructor for testing
+    std::pair<int, std::string> loadHighScore();
 public:
     HighScoreScene(sf::RenderWindow* window, bool edit, int score=0);
     ~HighScoreScene();

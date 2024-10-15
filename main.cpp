@@ -14,7 +14,7 @@
 #include "EnemyType.h"
 
 int main() {
-    Level level("level1.txt", "level1.png", 32, {2}, {EnemyType::Enemy::Ghost}); 
+    Level level("data/level1.txt", "img/level1.png", 32, {2}, {EnemyType::Enemy::Ghost}); 
     sf::RenderWindow window(sf::VideoMode(800,600), "unearthed.");
     sf::Clock deltaClock;
     MenuScene* menu = new MenuScene(&window);

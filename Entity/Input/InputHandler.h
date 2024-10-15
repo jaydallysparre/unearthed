@@ -20,7 +20,6 @@ public:
     sf::Vector2f getMoveDir();
     sf::Vector2f getAttackDir();
     bool isAttacking();
-    bool isSpecialing();
 };
 
 #endif

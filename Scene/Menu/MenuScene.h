@@ -26,11 +26,11 @@ private:
     int buttonWidth = 300;
     sf::Texture menuTitleTexture;
     sf::Sprite menuTitle;
+    std::string toggleInputType();
+    void startGame();
 public:
     MenuScene(sf::RenderWindow* window);
     ~MenuScene();
-    void startGame();
-    std::string toggleInputType();
     void handleEvent(sf::Event event);
     void update(float dt);
     void draw();
